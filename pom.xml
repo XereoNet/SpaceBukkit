@@ -1,0 +1,157 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<!-- Project information -->
+	<groupId>me.neatmonster</groupId>
+	<artifactId>spacebukkit</artifactId>
+	<version>0.1-SNAPSHOT</version>
+	<name>SpaceBukkit</name>
+	<url>http://spacebukkit.xereo.net/</url>
+	<description>A powerful yet simple web panel for administering your Minecraft servers with ease.</description>
+
+	<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+	</properties>
+
+	<!-- License -->
+	<licenses>
+		<license>
+			<name>Attribution-NonCommercial-ShareAlike Unported (CC BY-NC-SA)</name>
+			<url>http://creativecommons.org/licenses/by-nc-sa/3.0/</url>
+			<distribution>repo</distribution>
+		</license>
+	</licenses>
+
+	<!-- Source code -->
+	<scm>
+		<developerConnection>scm:git:git@github.com:SpaceDev/${project.name}.git</developerConnection>
+		<connection>scm:git:git://github.com/SpaceDev/${project.name}.git</connection>
+		<url>https://github.com/SpaceDev/${project.name}</url>
+	</scm>
+
+	<!-- Continuous integration -->
+	<ciManagement>
+		<system>jenkins</system>
+		<url>http://dev.drdanick.com/jenkins/</url>
+	</ciManagement>
+
+	<!-- Repository locations -->
+	<repositories>
+		<!-- SpaceBukktit's repository -->
+		<repository>
+			<id>sb-snapshots</id>
+			<name>Snapshots</name>
+			<url>http://dev.drdanick.com/repo/content/repositories/sb-snapshots</url>
+		</repository>
+		<!-- 3rd party's repository -->
+		<repository>
+			<id>thirdparty</id>
+			<name>3rd party</name>
+			<url>http://dev.drdanick.com/repo/content/repositories/thirdparty</url>
+		</repository>
+		<!-- Bukkit's repository -->
+		<repository>
+			<id>bukkit</id>
+			<name>Bukkit</name>
+			<url>http://repo.bukkit.org/content/groups/public/</url>
+		</repository>
+	</repositories>
+
+	<!-- Dependencies -->
+	<dependencies>
+		<dependency>
+			<groupId>me.neatmonster</groupId>
+			<artifactId>spacemodule</artifactId>
+			<version>0.1-SNAPSHOT</version>
+			<scope>compile</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>me.neatmonster</groupId>
+			<artifactId>spacertk</artifactId>
+			<version>0.1-SNAPSHOT</version>
+			<scope>compile</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>org.bukkit</groupId>
+			<artifactId>bukkit</artifactId>
+			<version>1.1-R1-SNAPSHOT</version>
+			<scope>provided</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>com.googlecode.json-simple</groupId>
+			<artifactId>json-simple</artifactId>
+			<version>1.1</version>
+			<scope>compile</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>javasysmon</groupId>
+			<artifactId>javasysmon</artifactId>
+			<version>0.3.3</version>
+			<scope>compile</scope>
+		</dependency>
+	</dependencies>
+
+	<build>
+		<defaultGoal>clean package install</defaultGoal>
+		<sourceDirectory>${basedir}/src/</sourceDirectory>
+		<resources>
+			<resource>
+				<targetPath>.</targetPath>
+				<filtering>true</filtering>
+				<directory>${basedir}/src/</directory>
+				<includes>
+					<include>plugin.yml</include>
+				</includes>
+			</resource>
+		</resources>
+		<!-- Plugins -->
+		<plugins>
+			<!-- Compile plugin -->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>2.3.2</version>
+				<configuration>
+					<source>1.6</source>
+					<target>1.6</target>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-jar-plugin</artifactId>
+				<version>2.3.1</version>
+				<configuration>
+					<archive>
+						<addMavenDescriptor>false</addMavenDescriptor>
+						<pomPropertiesFile>false</pomPropertiesFile>
+						<manifest>
+							<addDefaultSpecificationEntries>false</addDefaultSpecificationEntries>
+							<addDefaultImplementationEntries>false</addDefaultImplementationEntries>
+						</manifest>
+					</archive>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-shade-plugin</artifactId>
+				<version>1.5</version>
+				<executions>
+					<execution>
+						<phase>package</phase>
+						<goals>
+							<goal>shade</goal>
+						</goals>
+					</execution>
+				</executions>
+				<configuration>
+					<minimizeJar>true</minimizeJar>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
+</project>

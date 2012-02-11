@@ -1,0 +1,7 @@
+name: SpaceBukkit
+version: 0.1
+description: A powerful yet simple web panel for administering your Minecraft servers with ease.
+author: NeatMonster
+website: http://spacebukkit.xereo.net/
+main: me.neatmonster.spacebukkit.SpaceBukkit
+database: false
