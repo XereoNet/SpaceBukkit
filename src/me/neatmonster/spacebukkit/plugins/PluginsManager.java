@@ -54,7 +54,8 @@ public class PluginsManager {
 
     public PluginsManager() {
         new Thread(new PluginsRequester()).start();
-        final Configuration configuration = new Configuration(new File("SpaceModule", "jars.yml"));
+        final Configuration configuration = new Configuration(new File("SpaceModule" + File.separator + "SpaceBukkit",
+                "jars.yml"));
         configuration.load();
         for (final Plugin plugin : Bukkit.getPluginManager().getPlugins()) {
             final File jar = getJAR(plugin);
