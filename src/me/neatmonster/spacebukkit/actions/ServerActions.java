@@ -451,6 +451,17 @@ public class ServerActions {
     }
 
     @Action(
+            aliases = {"setWorldWeather", "worldWeather", "weather"})
+    public boolean setWorldWeather(final String worldName, final Boolean storm, final Boolean thunder) {
+        final World world = Bukkit.getWorld(worldName);
+        if (world == null)
+            return false;
+        world.setStorm(storm);
+        world.setThundering(thunder);
+        return true;
+    }
+
+    @Action(
             aliases = {"unbanIp", "bannedIpsRemove"})
     public boolean unbanIp(final String ip) {
         if (!ip.equals("")) {
