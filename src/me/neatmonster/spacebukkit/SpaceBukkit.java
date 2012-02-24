@@ -46,16 +46,16 @@ public class SpaceBukkit extends JavaPlugin {
     public int                rPort;
     public String             salt;
 
-    public PluginsManager     pluginsManager     = new PluginsManager();
-    public ActionsManager     actionsManager     = new ActionsManager();
-    public PanelListener      panelListener      = new PanelListener();
-    public PerformanceMonitor performanceMonitor = new PerformanceMonitor();
+    public PluginsManager     pluginsManager;
+    public ActionsManager     actionsManager;
+    public PanelListener      panelListener;
+    public PerformanceMonitor performanceMonitor;
 
     private Configuration     configuration;
-    public Logger             logger             = Logger.getLogger("Minecraft");
-    public String             logTag             = "[SpaceBukkit] ";
+    public Logger             logger = Logger.getLogger("Minecraft");
+    public String             logTag = "[SpaceBukkit] ";
 
-    private final Timer       timer              = new Timer();
+    private final Timer       timer  = new Timer();
 
     @Override
     public void onDisable() {
@@ -88,9 +88,13 @@ public class SpaceBukkit extends JavaPlugin {
         configuration.save();
         new SBPlayerListener(this);
         new SBServerListener(this);
+        pluginsManager = new PluginsManager();
+        actionsManager = new ActionsManager();
         actionsManager.register(PlayerActions.class);
         actionsManager.register(ServerActions.class);
         actionsManager.register(SystemActions.class);
+        panelListener = new PanelListener();
+        performanceMonitor = new PerformanceMonitor();
         timer.scheduleAtFixedRate(performanceMonitor, 0L, 1000L);
         logger.info("----------------------------------------------------------");
         logger.info("|        SpaceBukkit version "
