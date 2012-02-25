@@ -14,21 +14,38 @@
  */
 package me.neatmonster.spacebukkit.players;
 
+import me.neatmonster.spacebukkit.SpaceBukkit;
+
 import org.bukkit.Bukkit;
-import org.bukkit.event.Event;
-import org.bukkit.event.Event.Priority;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.Listener;
+import org.bukkit.event.player.PlayerChatEvent;
+import org.bukkit.event.player.PlayerJoinEvent;
+import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.event.server.ServerCommandEvent;
-import org.bukkit.event.server.ServerListener;
-import org.bukkit.plugin.java.JavaPlugin;
 
-@SuppressWarnings("deprecation")
-public class SBServerListener extends ServerListener {
+public class SBListener implements Listener {
 
-    public SBServerListener(final JavaPlugin plugin) {
-        Bukkit.getPluginManager().registerEvent(Event.Type.SERVER_COMMAND, this, Priority.Monitor, plugin);
+    public SBListener(final SpaceBukkit plugin) {
+        Bukkit.getPluginManager().registerEvents(this, plugin);
     }
 
-    @Override
+    @EventHandler
+    public void onPlayerChat(final PlayerChatEvent event) {
+        PlayerLogger.addPlayerChat(event.getPlayer().getName(), event.getMessage());
+    }
+
+    @EventHandler
+    public void onPlayerJoin(final PlayerJoinEvent event) {
+        PlayerLogger.addPlayerJoin(event.getPlayer().getName());
+    }
+
+    @EventHandler
+    public void onPlayerQuit(final PlayerQuitEvent event) {
+        PlayerLogger.addPlayerQuit(event.getPlayer().getName());
+    }
+
+    @EventHandler
     public void onServerCommand(final ServerCommandEvent event) {
         if (event.getCommand().startsWith("say")) {
             final String message = event.getCommand().substring(4);

@@ -14,9 +14,14 @@
  */
 package me.neatmonster.spacebukkit.players;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.Map;
 import java.util.TreeMap;
 
+import org.bukkit.util.config.Configuration;
+
+@SuppressWarnings("deprecation")
 public class PlayerLogger {
     private static TreeMap<Long, String> chats    = new TreeMap<Long, String>();
     private static TreeMap<Long, String> joins    = new TreeMap<Long, String>();
@@ -64,6 +69,21 @@ public class PlayerLogger {
             quits.remove(quits.firstKey());
     }
 
+    public static String getCase(final String playerName) {
+        final File file = new File("SpaceModule", "players.yml");
+        if (!file.exists())
+            try {
+                file.createNewFile();
+            } catch (final IOException e) {
+                e.printStackTrace();
+            }
+        final Configuration configuration = new Configuration(file);
+        configuration.load();
+        final String result = configuration.getString(playerName.toLowerCase(), playerName);
+        configuration.save();
+        return result;
+    }
+
     public static long getLastJoin() {
         return lastJoin;
     }
@@ -103,5 +123,19 @@ public class PlayerLogger {
             x++;
         }
         return results;
+    }
+
+    public static void setCase(final String playerName) {
+        final File file = new File("SpaceModule", "players.yml");
+        if (!file.exists())
+            try {
+                file.createNewFile();
+            } catch (final IOException e) {
+                e.printStackTrace();
+            }
+        final Configuration configuration = new Configuration(file);
+        configuration.load();
+        configuration.setProperty(playerName.toLowerCase(), playerName);
+        configuration.save();
     }
 }

@@ -15,18 +15,22 @@
 package me.neatmonster.spacebukkit.actions;
 
 import java.io.UnsupportedEncodingException;
+import java.lang.reflect.Method;
 import java.net.URLDecoder;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 
+import me.neatmonster.spacebukkit.players.PlayerLogger;
 import me.neatmonster.spacebukkit.utilities.Utilities;
 import me.neatmonster.spacemodule.api.Action;
+import net.minecraft.server.ServerConfigurationManager;
 
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.OfflinePlayer;
+import org.bukkit.craftbukkit.CraftServer;
 import org.bukkit.entity.Player;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.inventory.ItemStack;
@@ -51,6 +55,7 @@ public class PlayerActions {
             aliases = {"addToWhitelist", "whitelistAdd"})
     public boolean addToWhitelist(final String playerName) {
         Bukkit.getOfflinePlayer(playerName).setWhitelisted(true);
+        PlayerLogger.setCase(playerName);
         return true;
     }
 
@@ -61,6 +66,7 @@ public class PlayerActions {
         final Player onlinePlayer = Bukkit.getPlayer(playerName);
         if (onlinePlayer != null)
             onlinePlayer.kickPlayer("You have been banned!");
+        PlayerLogger.setCase(playerName);
         return true;
     }
 
@@ -110,11 +116,16 @@ public class PlayerActions {
     }
 
     @Action(
-            aliases = {"getBanned", "getBanned", "banned"})
+            aliases = {"getBanned", "banned"})
     public List<String> getBanned() {
+        try {
+            final ServerConfigurationManager scm = ((CraftServer) Bukkit.getServer()).getHandle();
+            final Method method = scm.getClass().getDeclaredMethod("l");
+            method.invoke(scm);
+        } catch (final Exception e) {}
         final List<String> playersNames = new ArrayList<String>();
         for (final OfflinePlayer player : Bukkit.getBannedPlayers())
-            playersNames.add(player.getName());
+            playersNames.add(PlayerLogger.getCase(player.getName()));
         return playersNames;
     }
 
@@ -142,7 +153,7 @@ public class PlayerActions {
     public List<String> getOPs() {
         final List<String> playerNames = new ArrayList<String>();
         for (final OfflinePlayer player : Bukkit.getOperators())
-            playerNames.add(player.getName());
+            playerNames.add(PlayerLogger.getCase(player.getName()));
         return playerNames;
     }
 
@@ -181,6 +192,16 @@ public class PlayerActions {
         for (final Player player : Bukkit.getOnlinePlayers())
             playersNames.add(player.getName());
         return playersNames;
+    }
+
+    @Action(
+            aliases = {"getWhitelisted", "getWhitelist", "whitelist"})
+    public List<String> getWhitelisted() {
+        Bukkit.reloadWhitelist();
+        final List<String> playerNames = new ArrayList<String>();
+        for (final OfflinePlayer player : Bukkit.getWhitelistedPlayers())
+            playerNames.add(PlayerLogger.getCase(player.getName()));
+        return playerNames;
     }
 
     @Action(
@@ -334,6 +355,7 @@ public class PlayerActions {
         final Player onlinePlayer = Bukkit.getPlayer(playerName);
         if (onlinePlayer != null)
             onlinePlayer.sendMessage("You are now OP!");
+        PlayerLogger.setCase(playerName);
         return true;
     }
 

@@ -38,7 +38,6 @@ import me.neatmonster.spacemodule.api.UnhandledActionException;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
-import org.bukkit.OfflinePlayer;
 import org.bukkit.Server;
 import org.bukkit.World;
 import org.bukkit.permissions.Permission;
@@ -356,15 +355,6 @@ public class ServerActions {
         serverInformations.put("HasWhitelist", server.hasWhitelist());
         serverInformations.put("OnlinePlayers", server.getOnlinePlayers().length);
         return serverInformations;
-    }
-
-    @Action(
-            aliases = {"getWhitelist", "whitelist"})
-    public List<String> getWhitelist() {
-        final List<String> playerNames = new ArrayList<String>();
-        for (final OfflinePlayer player : Bukkit.getWhitelistedPlayers())
-            playerNames.add(player.getName());
-        return playerNames;
     }
 
     @Action(
