@@ -15,22 +15,32 @@
 package me.neatmonster.spacebukkit.events;
 
 import org.bukkit.event.Event;
+import org.bukkit.event.HandlerList;
 
 public class RequestEvent extends Event {
-    private static final long serialVersionUID = -2062637716599014869L;
+    private static final HandlerList handlers = new HandlerList();
 
-    private Object[]          arguments;
-    private String            method;
-    private Object            result           = null;
+    public static HandlerList getHandlerList() {
+        return handlers;
+    }
+
+    private Object[] arguments;
+    private String   method;
+
+    private Object   result = null;
 
     public RequestEvent(final String method, final Object[] arguments) {
-        super("RequestEvent");
         this.method = method;
         this.arguments = arguments;
     }
 
     public Object[] getArguments() {
         return arguments;
+    }
+
+    @Override
+    public HandlerList getHandlers() {
+        return handlers;
     }
 
     public String getMethod() {

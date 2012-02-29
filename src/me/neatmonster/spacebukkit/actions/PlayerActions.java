@@ -31,7 +31,9 @@ import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.craftbukkit.CraftServer;
+import org.bukkit.entity.Egg;
 import org.bukkit.entity.Player;
+import org.bukkit.entity.Snowball;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
@@ -45,7 +47,7 @@ public class PlayerActions {
     public static boolean throwEgg(final String playerName) {
         final Player player = Bukkit.getPlayer(playerName);
         if (player != null) {
-            player.throwEgg();
+            player.launchProjectile(Egg.class);
             return true;
         }
         return false;
@@ -157,7 +159,6 @@ public class PlayerActions {
         return playerNames;
     }
 
-    @SuppressWarnings("deprecation")
     @Action(
             aliases = {"getPlayerInformations", "playerInformations"},
             schedulable = false)
@@ -172,7 +173,7 @@ public class PlayerActions {
             playerInformations.put("X", player.getLocation().getX());
             playerInformations.put("Y", player.getLocation().getY());
             playerInformations.put("Z", player.getLocation().getZ());
-            playerInformations.put("Exhaustion", player.getExperience());
+            playerInformations.put("Exhaustion", player.getExhaustion());
             playerInformations.put("Experience", player.getExp());
             playerInformations.put("FoodLevel", player.getFoodLevel());
             playerInformations.put("GameMode", player.getGameMode().toString());
@@ -552,7 +553,7 @@ public class PlayerActions {
     public boolean snowball(final String playerName) {
         final Player player = Bukkit.getPlayer(playerName);
         if (player != null) {
-            player.throwSnowball();
+            player.launchProjectile(Snowball.class);
             return true;
         }
         return false;

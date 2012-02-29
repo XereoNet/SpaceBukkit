@@ -187,7 +187,7 @@ public class ServerActions {
     public String getDynmapHost() {
         final Plugin dynmap = Bukkit.getPluginManager().getPlugin("dynmap");
         if (dynmap != null)
-            return dynmap.getConfiguration().getString("webserver-bindaddress", "0.0.0.0");
+            return dynmap.getConfig().getString("webserver-bindaddress", "0.0.0.0");
         else
             return "";
     }
@@ -197,7 +197,7 @@ public class ServerActions {
     public String getDynmapPort() {
         final Plugin dynmap = Bukkit.getPluginManager().getPlugin("dynmap");
         if (dynmap != null)
-            return dynmap.getConfiguration().getString("webserver-port", "8123");
+            return dynmap.getConfig().getString("webserver-port", "8123");
         else
             return "";
     }
