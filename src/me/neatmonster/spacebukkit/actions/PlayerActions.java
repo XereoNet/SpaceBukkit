@@ -20,6 +20,7 @@ import java.net.URLDecoder;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
 import me.neatmonster.spacebukkit.players.PlayerLogger;
 import me.neatmonster.spacebukkit.utilities.Utilities;
@@ -134,20 +135,20 @@ public class PlayerActions {
     @Action(
             aliases = {"getInventory", "inventory"},
             schedulable = false)
-    public LinkedHashMap<Integer, LinkedHashMap<String, Object>> getInventory(final String playerName) {
-        final LinkedHashMap<Integer, LinkedHashMap<String, Object>> playerInventory = new LinkedHashMap<Integer, LinkedHashMap<String, Object>>();
+    public LinkedHashMap<Integer, Map<String, Object>> getInventory(final String playerName) {
+        final LinkedHashMap<Integer, Map<String, Object>> playerInventory = new LinkedHashMap<Integer, Map<String, Object>>();
         final Player player = Bukkit.getPlayer(playerName);
         if (player != null) {
             final PlayerInventory inventory = player.getInventory();
             for (int loop = 0; loop < inventory.getSize(); loop++)
-                playerInventory.put(loop, Utilities.formatItemStack(inventory.getItem(loop)));
-            playerInventory.put(36, Utilities.formatItemStack(inventory.getHelmet()));
-            playerInventory.put(37, Utilities.formatItemStack(inventory.getChestplate()));
-            playerInventory.put(38, Utilities.formatItemStack(inventory.getLeggings()));
-            playerInventory.put(39, Utilities.formatItemStack(inventory.getBoots()));
+                playerInventory.put(loop, inventory.getItem(loop).serialize());
+            playerInventory.put(36, inventory.getHelmet().serialize());
+            playerInventory.put(37, inventory.getChestplate().serialize());
+            playerInventory.put(38, inventory.getLeggings().serialize());
+            playerInventory.put(39, inventory.getBoots().serialize());
             return playerInventory;
         }
-        return new LinkedHashMap<Integer, LinkedHashMap<String, Object>>();
+        return new LinkedHashMap<Integer, Map<String, Object>>();
     }
 
     @Action(

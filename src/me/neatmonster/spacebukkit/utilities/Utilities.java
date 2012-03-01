@@ -22,13 +22,11 @@ import java.net.URL;
 import java.net.URLConnection;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import java.util.LinkedHashMap;
 import java.util.logging.Logger;
 
 import me.neatmonster.spacebukkit.SpaceBukkit;
 
 import org.bukkit.ChatColor;
-import org.bukkit.inventory.ItemStack;
 
 public class Utilities {
     public static Logger logger = Logger.getLogger("Minecraft");
@@ -121,16 +119,6 @@ public class Utilities {
             e.printStackTrace();
         }
         return "UnsupportedEncodingException";
-    }
-
-    public static LinkedHashMap<String, Object> formatItemStack(final ItemStack stack) {
-        final LinkedHashMap<String, Object> content = new LinkedHashMap<String, Object>();
-        content.put("ID", stack.getTypeId());
-        content.put("Amount", stack.getAmount());
-        content.put("Durability", stack.getDurability());
-        if (stack.getData() != null)
-            content.put("Data", stack.getData().getData());
-        return content;
     }
 
     public static String formatTime(final long time) {
