@@ -18,6 +18,7 @@ import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Method;
 import java.net.URLDecoder;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -138,12 +139,35 @@ public class PlayerActions {
     public LinkedHashMap<Integer, Map<String, Object>> getInventory(final String playerName) {
         final LinkedHashMap<Integer, Map<String, Object>> playerInventory = new LinkedHashMap<Integer, Map<String, Object>>();
         final Player player = Bukkit.getPlayer(playerName);
-        if (player != null) {
-            for (int i = 0; i < player.getInventory().getContents().length; i++)
-                playerInventory.put(i, player.getInventory().getContents()[i].serialize());
-            return playerInventory;
-        }
-        return new LinkedHashMap<Integer, Map<String, Object>>();
+        if (player == null)
+            return new LinkedHashMap<Integer, Map<String, Object>>();
+        if (player.getInventory() == null)
+            return new LinkedHashMap<Integer, Map<String, Object>>();
+        for (int i = 0; i < player.getInventory().getSize(); i++)
+            playerInventory.put(i, player.getInventory().getItem(i) == null ? new HashMap<String, Object>() : player
+                    .getInventory().getItem(i).serialize());
+        playerInventory.put(100, player.getInventory().getBoots() == null ? new HashMap<String, Object>() : player
+                .getInventory().getBoots().serialize());
+        playerInventory.put(101, player.getInventory().getLeggings() == null ? new HashMap<String, Object>() : player
+                .getInventory().getLeggings().serialize());
+        playerInventory.put(102, player.getInventory().getChestplate() == null ? new HashMap<String, Object>() : player
+                .getInventory().getChestplate().serialize());
+        playerInventory.put(103, player.getInventory().getHelmet() == null ? new HashMap<String, Object>() : player
+                .getInventory().getHelmet().serialize());
+        return playerInventory;
+    }
+
+    @Action(
+            aliases = {"getItem", "getItemAt"},
+            schedulable = false)
+    public Map<String, Object> getItem(final String playerName, final int slot) {
+        final Player player = Bukkit.getPlayer(playerName);
+        if (player == null)
+            return new HashMap<String, Object>();
+        final ItemStack itemStack = player.getInventory().getItem(slot);
+        if (itemStack == null)
+            return new HashMap<String, Object>();
+        return itemStack.serialize();
     }
 
     @Action(

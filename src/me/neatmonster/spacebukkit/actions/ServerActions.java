@@ -38,6 +38,7 @@ import me.neatmonster.spacemodule.api.UnhandledActionException;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.Material;
 import org.bukkit.Server;
 import org.bukkit.World;
 import org.bukkit.permissions.Permission;
@@ -200,6 +201,29 @@ public class ServerActions {
             return dynmap.getConfig().getString("webserver-port", "8123");
         else
             return "";
+    }
+
+    @Action(
+            aliases = {"getItemName", "getName", "name"})
+    public String getItemName(final int id) {
+        String name = "";
+        for (final String subname : Material.getMaterial(id).name().split("_"))
+            name += subname.substring(0, 1).toUpperCase() + subname.substring(1, subname.length()).toLowerCase() + " ";
+        return name.substring(0, name.length() - 1).replace("Tnt", "TNT");
+    }
+
+    @Action(
+            aliases = {"getItems", "items"})
+    public Map<Integer, String> getItems() {
+        final LinkedHashMap<Integer, String> items = new LinkedHashMap<Integer, String>();
+        for (final Material material : Material.values()) {
+            String name = "";
+            for (final String subname : material.name().split("_"))
+                name += subname.substring(0, 1).toUpperCase() + subname.substring(1, subname.length()).toLowerCase()
+                        + " ";
+            items.put(material.getId(), name.substring(0, name.length() - 1).replace("Tnt", "TNT"));
+        }
+        return items;
     }
 
     @Action(
