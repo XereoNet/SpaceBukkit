@@ -293,7 +293,7 @@ public class ServerActions {
         if (plugin != null) {
             pluginInformations.put("Name", plugin.getDescription().getName());
             pluginInformations.put("IsEnabled", plugin.isEnabled());
-            pluginInformations.put("Commands", plugin.getDescription().getCommands());
+            // pluginInformations.put("Commands", plugin.getDescription().getCommands());
             pluginInformations.put("Depend", plugin.getDescription().getDepend());
             try {
                 pluginInformations.put("DataFolder", plugin.getDataFolder().getPath());

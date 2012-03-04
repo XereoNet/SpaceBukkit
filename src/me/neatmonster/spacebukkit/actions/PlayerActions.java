@@ -139,13 +139,8 @@ public class PlayerActions {
         final LinkedHashMap<Integer, Map<String, Object>> playerInventory = new LinkedHashMap<Integer, Map<String, Object>>();
         final Player player = Bukkit.getPlayer(playerName);
         if (player != null) {
-            final PlayerInventory inventory = player.getInventory();
-            for (int loop = 0; loop < inventory.getSize(); loop++)
-                playerInventory.put(loop, inventory.getItem(loop).serialize());
-            playerInventory.put(36, inventory.getHelmet().serialize());
-            playerInventory.put(37, inventory.getChestplate().serialize());
-            playerInventory.put(38, inventory.getLeggings().serialize());
-            playerInventory.put(39, inventory.getBoots().serialize());
+            for (int i = 0; i < player.getInventory().getContents().length; i++)
+                playerInventory.put(i, player.getInventory().getContents()[i].serialize());
             return playerInventory;
         }
         return new LinkedHashMap<Integer, Map<String, Object>>();
