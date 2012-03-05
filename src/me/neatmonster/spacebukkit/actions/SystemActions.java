@@ -45,8 +45,8 @@ public class SystemActions {
     }
 
     @Action(
-            aliases = {"getDeamonThreads", "deamonThreads"})
-    public int getDeamonThreads() {
+            aliases = {"getDaemonThreads", "daemonThreads"})
+    public int getDaemonThreads() {
         return ManagementFactory.getThreadMXBean().getDaemonThreadCount();
     }
 

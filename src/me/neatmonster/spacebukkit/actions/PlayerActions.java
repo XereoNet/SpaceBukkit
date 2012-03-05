@@ -141,8 +141,6 @@ public class PlayerActions {
         final Player player = Bukkit.getPlayer(playerName);
         if (player == null)
             return new LinkedHashMap<Integer, Map<String, Object>>();
-        if (player.getInventory() == null)
-            return new LinkedHashMap<Integer, Map<String, Object>>();
         for (int i = 0; i < player.getInventory().getSize(); i++)
             playerInventory.put(i, player.getInventory().getItem(i) == null ? new HashMap<String, Object>() : player
                     .getInventory().getItem(i).serialize());
