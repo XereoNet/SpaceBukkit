@@ -387,7 +387,7 @@ public class ServerActions {
         final Server server = Bukkit.getServer();
         serverInformations.put("Name", server.getName());
         serverInformations.put("AllowFlight", server.getAllowFlight());
-        serverInformations.put("AllowFlight", server.getAllowNether());
+        serverInformations.put("AllowNether", server.getAllowNether());
         serverInformations.put("DefaultGameMode", server.getDefaultGameMode().toString());
         serverInformations.put("MaxPlayers", server.getMaxPlayers());
         serverInformations.put("OnlineMode", server.getOnlineMode());
