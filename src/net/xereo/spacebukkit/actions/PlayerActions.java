@@ -1,18 +1,18 @@
 /*
  * This file is part of SpaceBukkit (http://spacebukkit.xereo.net/).
- * 
+ *
  * SpaceBukkit is free software: you can redistribute it and/or modify it under the terms of the
  * Attribution-NonCommercial-ShareAlike Unported (CC BY-NC-SA) license as published by the Creative
  * Common organization, either version 3.0 of the license, or (at your option) any later version.
- * 
- * SpaceBukkit is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without 
- * even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the 
+ *
+ * SpaceBukkit is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without
+ * even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
  * Attribution-NonCommercial-ShareAlike Unported (CC BY-NC-SA) license for more details.
- * 
+ *
  * You should have received a copy of the Attribution-NonCommercial-ShareAlike Unported (CC BY-NC-SA)
  * license along with this program. If not, see <http://creativecommons.org/licenses/by-nc-sa/3.0/>.
  */
-package me.neatmonster.spacebukkit.actions;
+package net.xereo.spacebukkit.actions;
 
 import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Method;
@@ -23,9 +23,9 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-import me.neatmonster.spacebukkit.players.PlayerLogger;
-import me.neatmonster.spacebukkit.utilities.Utilities;
-import me.neatmonster.spacemodule.api.Action;
+import net.xereo.spacebukkit.players.PlayerLogger;
+import net.xereo.spacebukkit.utilities.Utilities;
+import net.xereo.spacemodule.api.Action;
 import net.minecraft.server.ServerConfigurationManager;
 
 import org.bukkit.Bukkit;
