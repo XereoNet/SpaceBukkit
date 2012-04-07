@@ -108,7 +108,7 @@ public class PanelListener extends Thread {
                         else
                             output.println(Utilities.addHeader(null));
                     } else
-                        output.println(Utilities.addHeader(null));
+                        output.println(Utilities.addHeader("Incorrect Salt supplied. Access denied!"));
                 } else if (string.startsWith("ping"))
                     output.println(Utilities.addHeader("Pong!"));
                 else
