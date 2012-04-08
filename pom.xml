@@ -95,6 +95,13 @@
             <version>0.3.3</version>
             <scope>compile</scope>
         </dependency>
+
+        <dependency>
+            <groupId>ru.tehkode</groupId>
+            <artifactId>PermissionsEx</artifactId>
+            <version>1.19.2</version>
+            <scope>compile</scope>
+        </dependency>
     </dependencies>
 
     <build>
