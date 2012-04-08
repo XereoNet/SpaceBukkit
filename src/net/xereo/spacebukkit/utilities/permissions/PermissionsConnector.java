@@ -103,7 +103,7 @@ public interface PermissionsConnector {
      * Each element of the returned list will be in the form "world:group:permission" where 'world' is
      * the world name the permission belongs to, and 'group' is the group the permission belongs to.
      */
-    public List<String> getUsersForPermission(String permission);
+    public List<String> getUsersWithPermission(String permission);
 
     /**
      * Check if a user has a given permission.

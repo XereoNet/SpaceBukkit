@@ -31,8 +31,10 @@ import java.util.TreeMap;
 import net.xereo.spacebukkit.SpaceBukkit;
 import net.xereo.spacebukkit.players.PlayerLogger;
 import net.xereo.spacebukkit.utilities.ANSI;
+import net.xereo.spacebukkit.utilities.PermissionsManager;
 import net.xereo.spacebukkit.utilities.PropertiesFile;
 import net.xereo.spacebukkit.utilities.Utilities;
+import net.xereo.spacebukkit.utilities.permissions.PermissionsConnector;
 import net.xereo.spacemodule.api.Action;
 import net.xereo.spacemodule.api.UnhandledActionException;
 
@@ -45,6 +47,8 @@ import org.bukkit.permissions.Permission;
 import org.bukkit.plugin.Plugin;
 
 public class ServerActions {
+
+    private PermissionsManager permManager;
 
     @Action(
             aliases = {"banIp", "bannedIpsAdd"})
@@ -514,4 +518,157 @@ public class ServerActions {
                 .currentTimeMillis() - time * 1000
                 && PlayerLogger.getLastQuit() < System.currentTimeMillis() - time * 1000);
     }
+
+    //PERMISSIONS API
+
+    @Action(
+            aliases = {"permUserNames", "getPermUserNames"})
+    public List<String> getPermUserNames() {
+        if(permManager == null)
+            permManager = SpaceBukkit.getInstance().getPermissionsManager();
+        PermissionsConnector perms = permManager.getCurrentPermissionsConnector();
+        if(perms == null)
+            return new ArrayList<String>(0);
+        return perms.getUserNames();
+    }
+
+    @Action(
+            aliases = {"permUserNames", "getPermUserNames"})
+    public List<String> getPermUserNames(String world) {
+        if(permManager == null)
+            permManager = SpaceBukkit.getInstance().getPermissionsManager();
+        PermissionsConnector perms = permManager.getCurrentPermissionsConnector();
+        if(perms == null)
+            return new ArrayList<String>(0);
+        return perms.getUserNames(world);
+    }
+
+    @Action(
+            aliases = {"permGroupNames", "getPermGroupNames"})
+    public List<String> getPermGroupNames() {
+        if(permManager == null)
+            permManager = SpaceBukkit.getInstance().getPermissionsManager();
+        PermissionsConnector perms = permManager.getCurrentPermissionsConnector();
+        if(perms == null)
+            return new ArrayList<String>(0);
+        return perms.getGroupNames();
+    }
+
+    @Action(
+            aliases = {"permGroupNames", "getPermGroupNames"})
+    public List<String> getPermGroupNames(String world) {
+            if(permManager == null)
+                permManager = SpaceBukkit.getInstance().getPermissionsManager();
+            PermissionsConnector perms = permManager.getCurrentPermissionsConnector();
+            if(perms == null)
+            return new ArrayList<String>(0);
+        return perms.getGroupNames(world);
+    }
+
+    @Action(
+            aliases = {"permGroupUsers", "getPermGroupUsers"})
+    public List<String> getPermGroupUsers(String groupName) {
+        if(permManager == null)
+            permManager = SpaceBukkit.getInstance().getPermissionsManager();
+        PermissionsConnector perms = permManager.getCurrentPermissionsConnector();
+        if(perms == null)
+            return new ArrayList<String>(0);
+        List<String> names = perms.getGroupUsers(groupName);
+        return (names == null) ? new ArrayList<String>(0) : names;
+    }
+
+    @Action(
+            aliases = {"permGroupUsers", "getPermGroupUsers"})
+    public List<String> getPermGroupUsers(String groupName, String worldName) {
+        if(permManager == null)
+            permManager = SpaceBukkit.getInstance().getPermissionsManager();
+        PermissionsConnector perms = permManager.getCurrentPermissionsConnector();
+        if(perms == null)
+            return new ArrayList<String>(0);
+        return perms.getGroupUsers(groupName, worldName);
+    }
+
+    @Action(
+            aliases = {"groupPerms", "getGroupPerms"})
+    public List<String> getGroupPerms(String groupName) {
+        if(permManager == null)
+            permManager = SpaceBukkit.getInstance().getPermissionsManager();
+        PermissionsConnector perms = permManager.getCurrentPermissionsConnector();
+        if(perms == null)
+            return new ArrayList<String>(0);
+        List<String> groupPerms = perms.getGroupPermissions(groupName);
+        return (groupPerms == null) ? new ArrayList<String>(0) : groupPerms;
+    }
+
+    @Action(
+            aliases = {"groupPerms", "getGroupPerms"})
+    public List<String> getGroupPerms(String groupName, String world) {
+        if(permManager == null)
+            permManager = SpaceBukkit.getInstance().getPermissionsManager();
+        PermissionsConnector perms = permManager.getCurrentPermissionsConnector();
+        if(perms == null)
+            return new ArrayList<String>(0);
+        List<String> groupPerms = perms.getGroupPermissions(groupName, world);
+        return (groupPerms == null) ? new ArrayList<String>(0) : groupPerms;
+    }
+
+    @Action(
+            aliases = {"allGroupPerms", "getAllGroupPerms"})
+    public List<String> getAllGroupPerms(String groupName) {
+        if(permManager == null)
+            permManager = SpaceBukkit.getInstance().getPermissionsManager();
+        PermissionsConnector perms = permManager.getCurrentPermissionsConnector();
+        if(perms == null)
+            return new ArrayList<String>(0);
+        List<String> groupPerms = perms.getAllGroupPermissions(groupName);
+        return (groupPerms == null) ? new ArrayList<String>(0) : groupPerms;
+    }
+
+    @Action(
+            aliases = {"userPerms", "getUserPerms"})
+    public List<String> getUserPerms(String userName) {
+        if(permManager == null)
+            permManager = SpaceBukkit.getInstance().getPermissionsManager();
+        PermissionsConnector perms = permManager.getCurrentPermissionsConnector();
+        if(perms == null)
+            return new ArrayList<String>(0);
+        List<String> userPerms = perms.getUserPermissions(userName);
+        return (userPerms == null) ? new ArrayList<String>(0) : userPerms;
+    }
+
+    @Action(
+            aliases = {"usersWithPerm","usersWithPermission" , "getUsersWithPerm","getUsersWithPermission"})
+    public List<String> getUsersWithPermission(String permission) {
+        if(permManager == null)
+            permManager = SpaceBukkit.getInstance().getPermissionsManager();
+        PermissionsConnector perms = permManager.getCurrentPermissionsConnector();
+        if(perms == null)
+            return new ArrayList<String>(0);
+        return perms.getUsersWithPermission(permission);
+    }
+
+    @Action(
+            aliases = {"userHasPerm", "userHasPermission"})
+    public boolean userHasPermission(String userName, String permission, String world) {
+        if(permManager == null)
+            permManager = SpaceBukkit.getInstance().getPermissionsManager();
+        PermissionsConnector perms = permManager.getCurrentPermissionsConnector();
+        if(perms == null)
+            return false;
+        return perms.userHasPermission(userName, permission, world);
+    }
+
+    @Action(
+            aliases = {"worldsUserHasPerm", "worldUserHasPermission", "getWorldsUserHasPerm", "getWorldUserHasPermission"})
+    public List<String> getWorldsUserHasPermission(String userName, String permission) {
+        if(permManager == null)
+            permManager = SpaceBukkit.getInstance().getPermissionsManager();
+        PermissionsConnector perms = permManager.getCurrentPermissionsConnector();
+        if(perms == null)
+            return new ArrayList<String>(0);
+        List<String> worlds = perms.getWorldsUserHasPermission(userName, permission);
+        return (worlds == null) ? new ArrayList<String>(0) : worlds;
+    }
+
+
 }

@@ -25,6 +25,7 @@ import net.xereo.spacebukkit.actions.SystemActions;
 import net.xereo.spacebukkit.players.SBListener;
 import net.xereo.spacebukkit.plugins.PluginsManager;
 import net.xereo.spacebukkit.system.PerformanceMonitor;
+import net.xereo.spacebukkit.utilities.PermissionsManager;
 import net.xereo.spacemodule.api.ActionsManager;
 import net.xereo.spacertk.SpaceRTK;
 
@@ -41,24 +42,26 @@ public class SpaceBukkit extends JavaPlugin {
         return spacebukkit;
     }
 
-    public int                port;
-    public int                rPort;
-    public String             salt;
+    public int                 port;
+    public int                 rPort;
+    public String              salt;
 
-    public PluginsManager     pluginsManager;
-    public ActionsManager     actionsManager;
-    public PanelListener      panelListener;
-    public PerformanceMonitor performanceMonitor;
+    public PluginsManager      pluginsManager;
+    public ActionsManager      actionsManager;
+    public PanelListener       panelListener;
+    public PerformanceMonitor  performanceMonitor;
 
-    private Configuration     configuration;
-    public Logger             logger = Logger.getLogger("Minecraft");
-    public String             logTag = "[SpaceBukkit] ";
+    private Configuration      configuration;
+    public Logger              logger = Logger.getLogger("Minecraft");
+    public String              logTag = "[SpaceBukkit] ";
 
-    private final Timer       timer  = new Timer();
+    private final Timer        timer  = new Timer();
+    private PermissionsManager pManager;
 
     @Override
     public void onDisable() {
         performanceMonitor.infanticide();
+        pManager = null;
         timer.cancel();
         try {
             if (panelListener != null)
@@ -99,5 +102,13 @@ public class SpaceBukkit extends JavaPlugin {
                 + Bukkit.getPluginManager().getPlugin("SpaceBukkit").getDescription().getVersion()
                 + " is now enabled!         |");
         logger.info("----------------------------------------------------------");
+    }
+
+    public PermissionsManager getPermissionsManager() {
+        if(pManager == null) {
+            pManager = new PermissionsManager(PermissionsManager.findConnector());
+        }
+
+        return pManager;
     }
 }
