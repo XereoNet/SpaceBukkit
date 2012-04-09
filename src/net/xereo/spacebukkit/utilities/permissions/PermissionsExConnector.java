@@ -30,9 +30,26 @@ import java.util.Map;
 public class PermissionsExConnector implements PermissionsConnector {
 
     private PermissionManager pexManager;
+    private String version = "1.19.2";
 
     public PermissionsExConnector(PermissionManager pexManager) {
         this.pexManager = pexManager;
+    }
+
+    /**
+     * Get the name of the permissions plugin supported by this connector. (PermissionsEx)
+     * @return the String "PermissionsEx".
+     */
+    public String getPermissionsPluginName() {
+        return "PermissionsEx";
+    }
+
+    /**
+     * Get the version of PermissionsEx this connector was written for.
+     * @return the version of PermissionsEx this connector was written for.
+     */
+    public String getPermissionsPluginVersion() {
+        return version;
     }
 
     /**

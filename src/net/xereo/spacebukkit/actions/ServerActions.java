@@ -522,6 +522,42 @@ public class ServerActions {
     //PERMISSIONS API
 
     @Action(
+            aliases = {"permissionsAvailable", "permsAvailable"})
+    public boolean permissionsAvailable() {
+        if(permManager == null)
+            permManager = SpaceBukkit.getInstance().getPermissionsManager();
+        PermissionsConnector perms = permManager.getCurrentPermissionsConnector();
+        if(perms != null)
+            return true;
+
+        return false;
+    }
+
+    @Action(
+            aliases = {"permissionsPluginName", "permsPluginName"})
+    public String getPermissionsPluginName() {
+        if(permManager == null)
+            permManager = SpaceBukkit.getInstance().getPermissionsManager();
+        PermissionsConnector perms = permManager.getCurrentPermissionsConnector();
+        if(perms == null)
+            return "NULL";
+
+        return perms.getPermissionsPluginName();
+    }
+
+    @Action(
+            aliases = {"permissionsPluginVersion", "permsPluginVersion"})
+    public String getPermissionsPluginVersion() {
+        if(permManager == null)
+            permManager = SpaceBukkit.getInstance().getPermissionsManager();
+        PermissionsConnector perms = permManager.getCurrentPermissionsConnector();
+        if(perms == null)
+            return "NULL";
+
+        return perms.getPermissionsPluginVersion();
+    }
+
+    @Action(
             aliases = {"permUserNames", "getPermUserNames"})
     public List<String> getPermUserNames() {
         if(permManager == null)

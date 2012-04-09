@@ -22,6 +22,19 @@ import java.util.List;
  */
 public interface PermissionsConnector {
 
+
+    /**
+     * Get the name of the permissions plugin supported by some connector.
+     * @return the name of the permissions plugin supported by some connector.
+     */
+    public String getPermissionsPluginName();
+
+    /**
+     * Get the version of the permissions plugin some connector was written for.
+     * @return The version of the permissions plugin some connector was written for.
+     */
+    public String getPermissionsPluginVersion();
+
     /**
      * Get a full list of users under a permissions plugin.
      * @return The full list of users under the permissions plugin.
