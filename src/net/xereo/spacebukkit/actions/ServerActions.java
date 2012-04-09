@@ -569,8 +569,8 @@ public class ServerActions {
     }
 
     @Action(
-            aliases = {"permUserNames", "getPermUserNames"})
-    public List<String> getPermUserNames(String world) {
+            aliases = {"permUserNamesForWorld", "getPermUserNamesForWorld"})
+    public List<String> getPermUserNamesForWorld(String world) {
         if(permManager == null)
             permManager = SpaceBukkit.getInstance().getPermissionsManager();
         PermissionsConnector perms = permManager.getCurrentPermissionsConnector();
@@ -591,8 +591,8 @@ public class ServerActions {
     }
 
     @Action(
-            aliases = {"permGroupNames", "getPermGroupNames"})
-    public List<String> getPermGroupNames(String world) {
+            aliases = {"permGroupNamesForWorld", "getPermGroupNamesForWorld"})
+    public List<String> getPermGroupNamesForWorld(String world) {
             if(permManager == null)
                 permManager = SpaceBukkit.getInstance().getPermissionsManager();
             PermissionsConnector perms = permManager.getCurrentPermissionsConnector();
@@ -614,8 +614,8 @@ public class ServerActions {
     }
 
     @Action(
-            aliases = {"permGroupUsers", "getPermGroupUsers"})
-    public List<String> getPermGroupUsers(String groupName, String worldName) {
+            aliases = {"permGroupUsersForWorld", "getPermGroupUsersForWorld"})
+    public List<String> getPermGroupUsersForWorld(String groupName, String worldName) {
         if(permManager == null)
             permManager = SpaceBukkit.getInstance().getPermissionsManager();
         PermissionsConnector perms = permManager.getCurrentPermissionsConnector();
@@ -637,8 +637,8 @@ public class ServerActions {
     }
 
     @Action(
-            aliases = {"groupPerms", "getGroupPerms"})
-    public List<String> getGroupPerms(String groupName, String world) {
+            aliases = {"groupPermsForWorld", "getGroupPermsForWorld"})
+    public List<String> getGroupPermsForWorld(String groupName, String world) {
         if(permManager == null)
             permManager = SpaceBukkit.getInstance().getPermissionsManager();
         PermissionsConnector perms = permManager.getCurrentPermissionsConnector();
