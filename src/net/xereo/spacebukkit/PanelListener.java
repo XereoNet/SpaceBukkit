@@ -96,7 +96,9 @@ public class PanelListener extends Thread {
             try {
                 final BufferedReader input = new BufferedReader(new InputStreamReader(socket.getInputStream()));
                 String string = input.readLine();
+                System.out.println("GET_RAW: "+string);
                 string = URLDecoder.decode(string, "UTF-8");
+                System.out.println("GET_DECODED: "+string);
                 string = string.substring(5, string.length() - 9);
                 final PrintWriter output = new PrintWriter(socket.getOutputStream());
                 if (string.startsWith("call") && string.contains("?method=") && string.contains("&args=")) {
@@ -105,14 +107,20 @@ public class PanelListener extends Thread {
                         final Object result = interpret(string);
                         if (result != null)
                             output.println(Utilities.addHeader(JSONValue.toJSONString(result)));
-                        else
-                            output.println(Utilities.addHeader(null));
-                    } else
+                        else{
+                            System.out.println("RETURN: NULL1");
+                            output.println(Utilities.addHeader(/*null*/"NULL1!"));
+                        }
+                    } else {
+                        System.out.println("Access denied!");
                         output.println(Utilities.addHeader("Incorrect Salt supplied. Access denied!"));
+                    }
                 } else if (string.startsWith("ping"))
                     output.println(Utilities.addHeader("Pong!"));
-                else
-                    output.println(Utilities.addHeader(null));
+                else {
+                    System.out.println("RETURN: NULL2");
+                    output.println(Utilities.addHeader(/*null*/"NULL2!"));
+                }
                 output.flush();
                 input.close();
                 output.close();
