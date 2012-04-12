@@ -79,20 +79,25 @@ public class PanelListener extends Thread {
 
     @Override
     public void run() {
-        if (mode == 0)
+        if (mode == 0) {
+
             try {
                 serverSocket = new ServerSocket(SpaceBukkit.getInstance().port);
-                while (!serverSocket.isClosed()) {
+            } catch(IOException e) {
+                e.printStackTrace();
+                return;
+            }
+
+            while (!serverSocket.isClosed()) {
+                try {
                     final Socket clientSocket = serverSocket.accept();
                     new PanelListener(clientSocket);
+                } catch (final Exception e) {
+                    if (!e.getMessage().contains("socket closed"))
+                        e.printStackTrace();
                 }
-            } catch (final SocketException e) {
-                if (!e.getMessage().contains("socket closed"))
-                    e.printStackTrace();
-            } catch (final Exception e) {
-                e.printStackTrace();
             }
-        else
+        } else {
             try {
                 final BufferedReader input = new BufferedReader(new InputStreamReader(socket.getInputStream()));
                 String string = input.readLine();
@@ -119,6 +124,7 @@ public class PanelListener extends Thread {
             } catch (final Exception e) {
                 e.printStackTrace();
             }
+        }
     }
 
     public void stopServer() throws IOException {
