@@ -42,7 +42,7 @@ SpaceBukkit is a project developed over the last 6 months aiming to bring an adv
  * [Antariano](https://github.com/Antariano/) - SpaceCP.
  * [JamyDev](https://github.com/JamyDev/) - SpaceCP.
  * [NeatMonster](https://github.com/NeatMonster/) - SpaceModule, SpaceRTK and SpaceBukkit.
- * [Drdanick](https://github.com/Drdanick/) - RemoteToolkit.
+ * [Drdanick](https://github.com/Drdanick/) - RemoteToolkit, SpaceModule, SpaceRTK and Spacebukkit.
 
 ## Links
 - Website: [http://spacebukkit.xereo.net/](http://spacebukkit.xereo.net/).
