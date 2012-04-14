@@ -19,9 +19,8 @@ import java.io.IOException;
 import java.util.Map;
 import java.util.TreeMap;
 
-import org.bukkit.util.config.Configuration;
+import net.xereo.spacebukkit.utilities.PropertiesFile;
 
-@SuppressWarnings("deprecation")
 public class PlayerLogger {
     private static TreeMap<Long, String> chats    = new TreeMap<Long, String>();
     private static TreeMap<Long, String> joins    = new TreeMap<Long, String>();
@@ -70,18 +69,18 @@ public class PlayerLogger {
     }
 
     public static String getCase(final String playerName) {
-        final File file = new File("SpaceModule", "players.yml");
-        if (!file.exists())
-            try {
-                file.createNewFile();
-            } catch (final IOException e) {
-                e.printStackTrace();
-            }
-        final Configuration configuration = new Configuration(file);
-        configuration.load();
-        final String result = configuration.getString(playerName.toLowerCase(), playerName);
-        configuration.save();
-        return result;
+        try {
+            final PropertiesFile propertiesFile = new PropertiesFile(
+                    new File("SpaceModule", "players.properties").getPath());
+            propertiesFile.load();
+            final String savedPlayerName = propertiesFile.getString(playerName.toLowerCase());
+            propertiesFile.save();
+            if (savedPlayerName != null && !savedPlayerName.equals(""))
+                return savedPlayerName;
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return playerName;
     }
 
     public static long getLastJoin() {
@@ -126,16 +125,14 @@ public class PlayerLogger {
     }
 
     public static void setCase(final String playerName) {
-        final File file = new File("SpaceModule", "players.yml");
-        if (!file.exists())
-            try {
-                file.createNewFile();
-            } catch (final IOException e) {
-                e.printStackTrace();
-            }
-        final Configuration configuration = new Configuration(file);
-        configuration.load();
-        configuration.setProperty(playerName.toLowerCase(), playerName);
-        configuration.save();
+        try {
+            final PropertiesFile propertiesFile = new PropertiesFile(
+                    new File("SpaceModule", "players.properties").getPath());
+            propertiesFile.load();
+            propertiesFile.setString(playerName.toLowerCase(), playerName);
+            propertiesFile.save();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }
