@@ -12,7 +12,7 @@
  * You should have received a copy of the Attribution-NonCommercial-ShareAlike Unported (CC BY-NC-SA)
  * license along with this program. If not, see <http://creativecommons.org/licenses/by-nc-sa/3.0/>.
  */
-package net.xereo.spacebukkit.actions;
+package me.neatmonster.spacebukkit.actions;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -28,15 +28,15 @@ import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
 
-import net.xereo.spacebukkit.SpaceBukkit;
-import net.xereo.spacebukkit.players.PlayerLogger;
-import net.xereo.spacebukkit.utilities.ANSI;
-import net.xereo.spacebukkit.utilities.PermissionsManager;
-import net.xereo.spacebukkit.utilities.PropertiesFile;
-import net.xereo.spacebukkit.utilities.Utilities;
-import net.xereo.spacebukkit.utilities.permissions.PermissionsConnector;
-import net.xereo.spacemodule.api.Action;
-import net.xereo.spacemodule.api.UnhandledActionException;
+import me.neatmonster.spacebukkit.SpaceBukkit;
+import me.neatmonster.spacebukkit.players.PlayerLogger;
+import me.neatmonster.spacebukkit.utilities.ANSI;
+import me.neatmonster.spacebukkit.utilities.PermissionsManager;
+import me.neatmonster.spacebukkit.utilities.PropertiesFile;
+import me.neatmonster.spacebukkit.utilities.Utilities;
+import me.neatmonster.spacebukkit.utilities.permissions.PermissionsConnector;
+import me.neatmonster.spacemodule.api.Action;
+import me.neatmonster.spacemodule.api.UnhandledActionException;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;

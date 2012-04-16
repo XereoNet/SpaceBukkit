@@ -4,7 +4,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <!-- Project information -->
-    <groupId>net.xereo</groupId>
+    <groupId>me.neatmonster</groupId>
     <artifactId>spacebukkit</artifactId>
     <version>0.1-SNAPSHOT</version>
     <name>SpaceBukkit</name>
@@ -62,14 +62,14 @@
     <!-- Dependencies -->
     <dependencies>
         <dependency>
-            <groupId>net.xereo</groupId>
+            <groupId>me.neatmonster</groupId>
             <artifactId>spacemodule</artifactId>
             <version>0.1-SNAPSHOT</version>
             <scope>compile</scope>
         </dependency>
 
         <dependency>
-            <groupId>net.xereo</groupId>
+            <groupId>me.netamonster</groupId>
             <artifactId>spacertk</artifactId>
             <version>0.1-SNAPSHOT</version>
             <scope>compile</scope>

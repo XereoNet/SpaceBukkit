@@ -12,10 +12,10 @@
  * You should have received a copy of the Attribution-NonCommercial-ShareAlike Unported (CC BY-NC-SA) license along with
  * this program. If not, see <http://creativecommons.org/licenses/by-nc-sa/3.0/>.
  */
-package net.xereo.spacebukkit.utilities;
+package me.neatmonster.spacebukkit.utilities;
 
-import net.xereo.spacebukkit.utilities.permissions.PermissionsConnector;
-import net.xereo.spacebukkit.utilities.permissions.PermissionsExConnector;
+import me.neatmonster.spacebukkit.utilities.permissions.PermissionsConnector;
+import me.neatmonster.spacebukkit.utilities.permissions.PermissionsExConnector;
 import ru.tehkode.permissions.bukkit.PermissionsEx;
 
 /**
