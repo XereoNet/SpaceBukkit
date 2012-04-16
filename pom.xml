@@ -69,7 +69,7 @@
         </dependency>
 
         <dependency>
-            <groupId>me.netamonster</groupId>
+            <groupId>me.neatmonster</groupId>
             <artifactId>spacertk</artifactId>
             <version>0.1-SNAPSHOT</version>
             <scope>compile</scope>
