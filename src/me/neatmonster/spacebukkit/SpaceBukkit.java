@@ -19,6 +19,8 @@ import java.util.Timer;
 import java.util.UUID;
 import java.util.logging.Logger;
 
+import com.drdanick.rtoolkit.EventDispatcher;
+import com.drdanick.rtoolkit.event.ToolkitEventHandler;
 import me.neatmonster.spacebukkit.actions.PlayerActions;
 import me.neatmonster.spacebukkit.actions.ServerActions;
 import me.neatmonster.spacebukkit.actions.SystemActions;
@@ -42,21 +44,24 @@ public class SpaceBukkit extends JavaPlugin {
         return spacebukkit;
     }
 
-    public int                 port;
-    public int                 rPort;
-    public String              salt;
+    public int                  port;
+    public int                  rPort;
+    public String               salt;
 
-    public PluginsManager      pluginsManager;
-    public ActionsManager      actionsManager;
-    public PanelListener       panelListener;
-    public PerformanceMonitor  performanceMonitor;
+    public PluginsManager       pluginsManager;
+    public ActionsManager       actionsManager;
+    public PanelListener        panelListener;
+    public PerformanceMonitor   performanceMonitor;
 
-    private Configuration      configuration;
-    public Logger              logger = Logger.getLogger("Minecraft");
-    public String              logTag = "[SpaceBukkit] ";
+    private Configuration       configuration;
+    public Logger               logger = Logger.getLogger("Minecraft");
+    public String               logTag = "[SpaceBukkit] ";
 
-    private final Timer        timer  = new Timer();
-    private PermissionsManager pManager;
+    private final Timer         timer  = new Timer();
+    private PermissionsManager  pManager;
+
+    private EventDispatcher     edt;
+    private ToolkitEventHandler eventHandler;
 
     @Override
     public void onDisable() {
@@ -69,6 +74,9 @@ public class SpaceBukkit extends JavaPlugin {
         } catch (final Exception e) {
             logger.severe(logTag + e.getMessage());
         }
+        edt.setRunning(false);
+        edt.notifyAll();
+        eventHandler.setEnabled(false);
         logger.info("----------------------------------------------------------");
         logger.info("|             SpaceBukkit is now disabled!               |");
         logger.info("----------------------------------------------------------");
@@ -88,6 +96,27 @@ public class SpaceBukkit extends JavaPlugin {
         port = configuration.getInt("SpaceBukkit.Port", 2011);
         rPort = configuration.getInt("SpaceRTK.Port", 2012);
         configuration.save();
+
+        if(edt == null)
+            edt = new EventDispatcher();
+
+        if(!edt.isRunning()) {
+            edt.notifyAll();
+            edt.setRunning(true);
+            Thread edtThread = new Thread(edt, "SpaceModule EventDispatcher");
+            edtThread.setDaemon(true);
+            edtThread.start();
+        }
+
+        if(eventHandler != null) {
+            eventHandler.setEnabled(true);
+            if(!eventHandler.isRunning())
+                new Thread(eventHandler, "SpaceModule EventHandler").start();
+        } else {
+            eventHandler = new EventHandler();
+            new Thread(eventHandler, "SpaceModule EventHandler").start();
+        }
+
         new SBListener(this);
         pluginsManager = new PluginsManager();
         actionsManager = new ActionsManager();
@@ -104,6 +133,14 @@ public class SpaceBukkit extends JavaPlugin {
         logger.info("----------------------------------------------------------");
     }
 
+    public EventDispatcher getEdt() {
+        return edt;
+    }
+
+    public ToolkitEventHandler getEventHandler() {
+        return eventHandler;
+    }
+
     public PermissionsManager getPermissionsManager() {
         if(pManager == null) {
             pManager = new PermissionsManager(PermissionsManager.findConnector());
@@ -111,4 +148,11 @@ public class SpaceBukkit extends JavaPlugin {
 
         return pManager;
     }
+
+    private class EventHandler extends ToolkitEventHandler {
+        public EventHandler() {
+            setEnabled(true);
+        }
+    }
+
 }
