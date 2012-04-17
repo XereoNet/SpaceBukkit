@@ -75,7 +75,9 @@ public class SpaceBukkit extends JavaPlugin {
             logger.severe(logTag + e.getMessage());
         }
         edt.setRunning(false);
-        edt.notifyAll();
+        synchronized (edt) {
+            edt.notifyAll();
+        }
         eventHandler.setEnabled(false);
         logger.info("----------------------------------------------------------");
         logger.info("|             SpaceBukkit is now disabled!               |");
@@ -101,7 +103,9 @@ public class SpaceBukkit extends JavaPlugin {
             edt = new EventDispatcher();
 
         if(!edt.isRunning()) {
-            edt.notifyAll();
+            synchronized(edt) {
+                edt.notifyAll();
+            }
             edt.setRunning(true);
             Thread edtThread = new Thread(edt, "SpaceModule EventDispatcher");
             edtThread.setDaemon(true);
