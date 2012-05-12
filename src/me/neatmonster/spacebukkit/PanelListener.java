@@ -94,9 +94,7 @@ public class PanelListener extends Thread {
                     final Socket clientSocket = serverSocket.accept();
                     new PanelListener(clientSocket);
                 } catch (final Exception e) {
-                    if (!e.getMessage().contains("socket closed"))
                         e.printStackTrace();
-                }
             }
         } else {
             try {
