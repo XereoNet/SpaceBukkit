@@ -32,6 +32,8 @@ import org.bukkit.Bukkit;
 import org.json.simple.JSONValue;
 
 public class PanelListener extends Thread {
+    
+    private boolean running = true;
 
     @SuppressWarnings("unchecked")
     private static Object interpret(final String string) throws InvalidArgumentsException, UnhandledActionException {
@@ -87,12 +89,11 @@ public class PanelListener extends Thread {
                 return;
             }
 
-            while (!serverSocket.isClosed()) {
+            while (running && !serverSocket.isClosed()) {
                 try {
                     final Socket clientSocket = serverSocket.accept();
                     new PanelListener(clientSocket);
                 } catch (final Exception e) {
-                    if (!e.getMessage().contains("socket closed"))
                         e.printStackTrace();
                 }
             }
@@ -127,7 +128,9 @@ public class PanelListener extends Thread {
     }
 
     public void stopServer() throws IOException {
-        if (serverSocket != null)
+        running = false;
+        if (serverSocket != null) {
             serverSocket.close();
+        }
     }
 }
