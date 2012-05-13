@@ -95,6 +95,7 @@ public class PanelListener extends Thread {
                     new PanelListener(clientSocket);
                 } catch (final Exception e) {
                         e.printStackTrace();
+                }
             }
         } else {
             try {
