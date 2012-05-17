@@ -34,14 +34,6 @@ import org.json.simple.JSONValue;
 /**
  * Listens and accepts requests from the panel
  */
-// MERGED: giveItemWithData - giveItem
-// FIXED: Empty say command causing NPE
-// FIXED: Handling exceptions in PlayerActions
-// MERGED: setInventorySlot - setInventorySlotWithData - setInventorySlotWithDataAndDamage
-// CHANGED: Added id, damage, and data arguments to updateInventorySlot
-// FIXED: If possible, add the jar to the configuration in PluginsManager.contains
-// ADDED: JavaDocs
-// CHANGED: Ignores cancelled events (Chats, Commands, etc)
 public class PanelListener extends Thread {
 
     /**
