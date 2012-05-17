@@ -35,6 +35,9 @@ import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.util.config.Configuration;
 
+/**
+ * Main class of the Plugin
+ */
 @SuppressWarnings("deprecation")
 public class SpaceBukkit extends JavaPlugin {
     public static SpaceRTK     spaceRTK = null;
@@ -63,6 +66,9 @@ public class SpaceBukkit extends JavaPlugin {
     private EventDispatcher     edt;
     private ToolkitEventHandler eventHandler;
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void onDisable() {
         performanceMonitor.infanticide();
@@ -84,6 +90,9 @@ public class SpaceBukkit extends JavaPlugin {
         logger.info("----------------------------------------------------------");
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void onEnable() {
         spacebukkit = this;
@@ -137,14 +146,26 @@ public class SpaceBukkit extends JavaPlugin {
         logger.info("----------------------------------------------------------");
     }
 
+    /**
+     * Gets the RTK event dispatcher
+     * @return event dispatcher
+     */
     public EventDispatcher getEdt() {
         return edt;
     }
 
+    /**
+     * Gets the RTK event handler
+     * @return event handler
+     */
     public ToolkitEventHandler getEventHandler() {
         return eventHandler;
     }
 
+    /**
+     * Gets the Permissions Manager
+     * @return permissions manager
+     */
     public PermissionsManager getPermissionsManager() {
         if(pManager == null) {
             pManager = new PermissionsManager(PermissionsManager.findConnector());
@@ -153,7 +174,13 @@ public class SpaceBukkit extends JavaPlugin {
         return pManager;
     }
 
+    /**
+     * Does...Nothing?
+     */
     private class EventHandler extends ToolkitEventHandler {
+        /**
+         * Creates a new Event Handler
+         */
         public EventHandler() {
             setEnabled(true);
         }

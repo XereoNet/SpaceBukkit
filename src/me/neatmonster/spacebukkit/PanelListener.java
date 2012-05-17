@@ -31,8 +31,26 @@ import me.neatmonster.spacemodule.api.UnhandledActionException;
 import org.bukkit.Bukkit;
 import org.json.simple.JSONValue;
 
+/**
+ * Listens and accepts requests from the panel
+ */
+// MERGED: giveItemWithData - giveItem
+// FIXED: Empty say command causing NPE
+// FIXED: Handling exceptions in PlayerActions
+// MERGED: setInventorySlot - setInventorySlotWithData - setInventorySlotWithDataAndDamage
+// CHANGED: Added id, damage, and data arguments to updateInventorySlot
+// FIXED: If possible, add the jar to the configuration in PluginsManager.contains
+// ADDED: JavaDocs
+// CHANGED: Ignores cancelled events (Chats, Commands, etc)
 public class PanelListener extends Thread {
 
+    /**
+     * Interprets a raw command from the panel
+     * @param string input from panel
+     * @return result of the action
+     * @throws InvalidArgumentsException Thrown when the wrong arguments are used by the panel
+     * @throws UnhandledActionException Thrown when there is no handler for the action
+     */
     @SuppressWarnings("unchecked")
     private static Object interpret(final String string) throws InvalidArgumentsException, UnhandledActionException {
         final int indexOfMethod = string.indexOf("?method=");
@@ -61,17 +79,30 @@ public class PanelListener extends Thread {
     private ServerSocket serverSocket = null;
     private Socket       socket;
 
+    /**
+     * Creates a new panel listener, listening for connections from a panel
+     */
     public PanelListener() {
         mode = 0;
         start();
     }
 
+    /**
+     * Creates a new panel listener, listening for input from the socket
+     * @param socket Socket to listen on
+     */
     public PanelListener(final Socket socket) {
         mode = 1;
         this.socket = socket;
         start();
     }
 
+    /**
+     * Gets the mode the panel listener is in
+     * 0 = Listening for opening connection from a panel
+     * 1 = Listening for input from a socket
+     * @return mode panel is in
+     */
     public int getMode() {
         return mode;
     }
@@ -126,6 +157,10 @@ public class PanelListener extends Thread {
         }
     }
 
+    /**
+     * Gracefully stops the listener
+     * @throws IOException If the socket cannot be closed
+     */
     public void stopServer() throws IOException {
         if (serverSocket != null)
             serverSocket.close();

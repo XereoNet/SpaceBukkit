@@ -25,6 +25,9 @@ import me.neatmonster.spacebukkit.SpaceBukkit;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONValue;
 
+/**
+ * Requests the plugins from BukGet
+ */
 public class PluginsRequester implements Runnable {
 
     @Override

@@ -24,31 +24,55 @@ import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.event.server.ServerCommandEvent;
 
+/**
+ * SpaceBukkit Event Listener
+ */
 public class SBListener implements Listener {
 
+    /**
+     * Creates a new SBListener
+     * @param plugin Plugin Instance
+     */
     public SBListener(final SpaceBukkit plugin) {
         Bukkit.getPluginManager().registerEvents(this, plugin);
     }
-
-    @EventHandler
+   
+    /**
+     * Called when a player chats
+     * @param event Relevant event details
+     */
+    @EventHandler(ignoreCancelled = true)
     public void onPlayerChat(final PlayerChatEvent event) {
         PlayerLogger.addPlayerChat(event.getPlayer().getName(), event.getMessage());
     }
 
-    @EventHandler
+    /**
+     * Called when a player joins
+     * @param event Relevant event details
+     */
+    @EventHandler(ignoreCancelled = true)
     public void onPlayerJoin(final PlayerJoinEvent event) {
         PlayerLogger.addPlayerJoin(event.getPlayer().getName());
     }
 
-    @EventHandler
+    /**
+     * Called when a player quits
+     * @param event Relevant event details
+     */
+    @EventHandler(ignoreCancelled = true)
     public void onPlayerQuit(final PlayerQuitEvent event) {
         PlayerLogger.addPlayerQuit(event.getPlayer().getName());
     }
 
-    @EventHandler
+    /**
+     * Called when a server performs a command
+     * @param event Relevant event details
+     */
+    @EventHandler(ignoreCancelled = true)
     public void onServerCommand(final ServerCommandEvent event) {
-        if (event.getCommand().startsWith("say")) {
-            final String message = event.getCommand().substring(4);
+        String cmd = event.getCommand();
+        if (cmd.startsWith("say") && !cmd.equalsIgnoreCase("say")) {
+            final String message = cmd.substring(4);
             PlayerLogger.addPlayerChat("Server", message);
         }
     }

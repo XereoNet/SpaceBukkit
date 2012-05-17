@@ -44,17 +44,14 @@ public class PermissionsManager {
 
     /**
      * Find an active supported bukkit permissions plugin and construct an appropriate connector.
+     * 
+     * Currently searches in the order of:
+     * - PermissionsEX
      *
      * @return A PermissionsConnector representing an active bukkit permissions system. This method will
      * return null if no supported permissions plugins are found.
      */
     public static PermissionsConnector findConnector() {
-        /*
-         * Permissions plugins are looked for in the following order:
-         * -PermissionsEX
-         *
-         * More to follow soon.
-         */
         if(PermissionsEx.isAvailable()) return new PermissionsExConnector(PermissionsEx.getPermissionManager());
 
         return null;

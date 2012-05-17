@@ -17,9 +17,16 @@ package me.neatmonster.spacebukkit.events;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 
+/**
+ * Called when a object is interpreted
+ */
 public class RequestEvent extends Event {
     private static final HandlerList handlers = new HandlerList();
 
+    /**
+     * Gets a list of Event Handlers
+     * @return Event Handlers
+     */
     public static HandlerList getHandlerList() {
         return handlers;
     }
@@ -29,11 +36,20 @@ public class RequestEvent extends Event {
 
     private Object   result = null;
 
+    /**
+     * Creates a new RequestEvent
+     * @param method Method that is being called
+     * @param arguments Arguments for that method
+     */
     public RequestEvent(final String method, final Object[] arguments) {
         this.method = method;
         this.arguments = arguments;
     }
 
+    /**
+     * Gets the arguments of the method
+     * @return Arguments
+     */
     public Object[] getArguments() {
         return arguments;
     }
@@ -43,22 +59,42 @@ public class RequestEvent extends Event {
         return handlers;
     }
 
+    /**
+     * Gets the method being called
+     * @return Method
+     */
     public String getMethod() {
         return method;
     }
 
+    /**
+     * Gets the result of the method with the specified arguments.  May be null
+     * @return Result
+     */
     public Object getResult() {
         return result;
     }
 
+    /**
+     * Sets the arguments used
+     * @param arguments New arguments
+     */
     public void setArguments(final Object[] arguments) {
         this.arguments = arguments;
     }
 
+    /**
+     * Sets the method used
+     * @param method New method
+     */
     public void setMethod(final String method) {
         this.method = method;
     }
 
+    /**
+     * Sets the result
+     * @param result New result
+     */
     public void setResult(final Object result) {
         this.result = result;
     }

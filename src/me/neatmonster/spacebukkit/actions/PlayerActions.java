@@ -32,6 +32,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.OfflinePlayer;
+import org.bukkit.World;
 import org.bukkit.craftbukkit.CraftServer;
 import org.bukkit.entity.Egg;
 import org.bukkit.entity.Player;
@@ -41,12 +42,20 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.material.MaterialData;
 
+/**
+ * Actions handler for any Player-related actions
+ */
 public class PlayerActions {
 
+    /**
+     * Throws an egg
+     * @param playerName Player to throw the egg
+     * @return If successful
+     */
     @Action(
             aliases = {"throwEgg", "egg"},
             schedulable = false)
-    public static boolean throwEgg(final String playerName) {
+    public boolean throwEgg(final String playerName) {
         final Player player = Bukkit.getPlayer(playerName);
         if (player != null) {
             player.launchProjectile(Egg.class);
@@ -55,6 +64,11 @@ public class PlayerActions {
         return false;
     }
 
+    /**
+     * Adds a player to the whitelist
+     * @param playerName Player to add to whitelist
+     * @return If successful
+     */
     @Action(
             aliases = {"addToWhitelist", "whitelistAdd"})
     public boolean addToWhitelist(final String playerName) {
@@ -63,6 +77,11 @@ public class PlayerActions {
         return true;
     }
 
+    /**
+     * Bans a player
+     * @param playerName  Player to ban
+     * @return If successful
+     */
     @Action(
             aliases = {"ban", "banPlayer", "bannedAdd"})
     public boolean ban(final String playerName) {
@@ -74,6 +93,12 @@ public class PlayerActions {
         return true;
     }
 
+    /**
+     * Sends a message to a player
+     * @param playerName Player to send the message too
+     * @param message Message to send to the player
+     * @return If successful
+     */
     @Action(
             aliases = {"chat", "talk"},
             schedulable = false)
@@ -86,6 +111,12 @@ public class PlayerActions {
         return false;
     }
 
+    /**
+     * Clears a players inventory slot
+     * @param playerName Player to clear slot
+     * @param slotNumber number of slot to clear
+     * @return If successful
+     */
     @Action(
             aliases = {"clearInventorySlot", "clearPlayerInventorySlot"},
             schedulable = false)
@@ -109,6 +140,11 @@ public class PlayerActions {
         return false;
     }
 
+    /**
+     * DeOP's a player
+     * @param playerName Player to DeOP
+     * @return If successful
+     */
     @Action(
             aliases = {"deop", "deopPlayer"})
     public boolean deop(final String playerName) {
@@ -119,6 +155,10 @@ public class PlayerActions {
         return true;
     }
 
+    /**
+     * Gets all the banned players
+     * @return All banned players
+     */
     @Action(
             aliases = {"getBanned", "banned"})
     public List<String> getBanned() {
@@ -133,6 +173,11 @@ public class PlayerActions {
         return playersNames;
     }
 
+    /**
+     * Gets a players inventory
+     * @param playerName Inventory to get
+     * @return Players inventory
+     */
     @Action(
             aliases = {"getInventory", "inventory"},
             schedulable = false)
@@ -155,6 +200,12 @@ public class PlayerActions {
         return playerInventory;
     }
 
+    /**
+     * Gets the item of a player at the specified slot
+     * @param playerName Player of item to get
+     * @param slot Slot to get the item at
+     * @return Item at the slot
+     */
     @Action(
             aliases = {"getItem", "getItemAt"},
             schedulable = false)
@@ -168,6 +219,10 @@ public class PlayerActions {
         return itemStack.serialize();
     }
 
+    /**
+     * Gets all the OPed players
+     * @return All OPed players
+     */
     @Action(
             aliases = {"getOps", "ops"})
     public List<String> getOPs() {
@@ -177,6 +232,11 @@ public class PlayerActions {
         return playerNames;
     }
 
+    /**
+     * Gets basic information about a player
+     * @param playerName Player to get information about
+     * @return Basic information about a player
+     */
     @Action(
             aliases = {"getPlayerInformations", "playerInformations"},
             schedulable = false)
@@ -204,6 +264,10 @@ public class PlayerActions {
         return new LinkedHashMap<String, Object>();
     }
 
+    /**
+     * Gets all online players
+     * @return All online players
+     */
     @Action(
             aliases = {"getPlayers", "getOnlinePlayers", "players"})
     public List<String> getPlayers() {
@@ -213,6 +277,10 @@ public class PlayerActions {
         return playersNames;
     }
 
+    /**
+     * Gets all whitelisted players 
+     * @return All whitelisted players
+     */
     @Action(
             aliases = {"getWhitelisted", "getWhitelist", "whitelist"})
     public List<String> getWhitelisted() {
@@ -223,94 +291,61 @@ public class PlayerActions {
         return playerNames;
     }
 
+    /**
+     * Gives a player an item
+     * @param playerName Player to give an item too
+     * @param aID Id of the item to give
+     * @param aAmount Amount of the item to give
+     * @return If successful
+     */
     @Action(
             aliases = {"giveItem", "give"},
             schedulable = false)
-    public boolean giveItem(final String playerName, final int aID, final int aAmount) {
+    public boolean giveItem(final String playerName, final int aID, final int aAmount, final byte data) {
         final Player player = Bukkit.getPlayer(playerName);
-        if (player != null)
-            try {
-                final ItemStack stack = new ItemStack(aID, aAmount);
-                final PlayerInventory inventory = player.getInventory();
-                if (stack.getAmount() <= 64)
-                    inventory.addItem(stack);
-                final int id = stack.getTypeId();
+        if (player != null) {
+            final ItemStack stack = new ItemStack(aID, aAmount, (short) 0, data);
+            final PlayerInventory inventory = player.getInventory();
+            if (stack.getAmount() <= 64)
+                inventory.addItem(stack);
                 final int amount = stack.getAmount();
-                final short durability = stack.getDurability();
-                final Byte data = stack.getData() != null ? stack.getData().getData() : null;
                 final int quotient = amount / 64;
                 final int remainder = amount % 64;
                 for (int i = 0; i < quotient; i++)
-                    inventory.addItem(new ItemStack(id, 64, durability, data));
+                    inventory.addItem(new ItemStack(id, 64, (short) 0, data));
                 if (remainder > 0)
-                    inventory.addItem(new ItemStack(id, remainder, durability, data));
+                    inventory.addItem(new ItemStack(id, remainder, (short) 0, data));
                 return true;
-            } catch (final Exception e) {
-                e.printStackTrace();
             }
         return false;
     }
 
+    /**
+     * Drops and item at a players location
+     * @param playerName Player whos location is to use
+     * @param id Id of item to drop
+     * @param amount Amount of item to drop
+     * @return If successful
+     */
     @Action(
             aliases = {"giveItemDrop", "giveDrop"},
             schedulable = false)
-    public boolean giveItemDrop(final String playerName, final int id, final int amount) {
+    public boolean giveItemDrop(final String playerName, final int id, final int amount, final byte data) {
         final Player player = Bukkit.getPlayer(playerName);
-        if (player != null)
-            try {
-                final ItemStack stack = new ItemStack(id, amount);
-                player.getWorld().dropItemNaturally(player.getLocation(), stack);
-                return true;
-            } catch (final Exception e) {
-                e.printStackTrace();
+        if (player != null) {
+            final ItemStack stack = new ItemStack(id, amount, (short) 0, data);
+            player.getWorld().dropItemNaturally(player.getLocation(), stack);
+            return true;
             }
         return false;
     }
 
-    @Action(
-            aliases = {"giveItemDropWithData", "giveDropData"},
-            schedulable = false)
-    public boolean giveItemDropWithData(final String playerName, final int id, final int amount, final short data) {
-        final Player player = Bukkit.getPlayer(playerName);
-        if (player != null)
-            try {
-                final ItemStack stack = new ItemStack(id, amount, data);
-                player.getWorld().dropItemNaturally(player.getLocation(), stack);
-                return true;
-            } catch (final Exception e) {
-                e.printStackTrace();
-            }
-        return false;
-    }
-
-    @Action(
-            aliases = {"giveItemWithData", "giveData"},
-            schedulable = false)
-    public boolean giveItemWithData(final String playerName, final int aID, final int aAmount, final short aData) {
-        final Player player = Bukkit.getPlayer(playerName);
-        if (player != null)
-            try {
-                final ItemStack stack = new ItemStack(aID, aAmount, aData);
-                final PlayerInventory inventory = player.getInventory();
-                if (stack.getAmount() <= 64)
-                    inventory.addItem(stack);
-                final int id = stack.getTypeId();
-                final int amount = stack.getAmount();
-                final short durability = stack.getDurability();
-                final Byte data = stack.getData() != null ? stack.getData().getData() : null;
-                final int quotient = amount / 64;
-                final int remainder = amount % 64;
-                for (int i = 0; i < quotient; i++)
-                    inventory.addItem(new ItemStack(id, 64, durability, data));
-                if (remainder > 0)
-                    inventory.addItem(new ItemStack(id, remainder, durability, data));
-                return true;
-            } catch (final Exception e) {
-                e.printStackTrace();
-            }
-        return false;
-    }
-
+    /**
+     * Checks if a player has a permission
+     * @param playerName Player to check
+     * @param permission Permission to check
+     * @return If the player has the permission
+     */
     @Action(
             aliases = {"hasPermission", "permission"},
             schedulable = false)
@@ -321,6 +356,12 @@ public class PlayerActions {
         return false;
     }
 
+    /**
+     * Kicks a player
+     * @param playerName Player to kick
+     * @param message Reason to kick the player
+     * @return If successful
+     */
     @Action(
             aliases = {"kick", "kickPlayer"},
             schedulable = false)
@@ -333,6 +374,11 @@ public class PlayerActions {
         return false;
     }
 
+    /**
+     * Kills a player
+     * @param playerName Player to kill
+     * @return If successful
+     */
     @Action(
             aliases = {"kill", "killPlayer"},
             schedulable = false)
@@ -347,6 +393,12 @@ public class PlayerActions {
         return false;
     }
 
+    /**
+     * Sends a player a message
+     * @param playerName Player to message
+     * @param message Message to send
+     * @return If successful
+     */
     @Action(
             aliases = {"message", "sendMessage", "msg", "pm"},
             schedulable = false)
@@ -367,6 +419,11 @@ public class PlayerActions {
         return false;
     }
 
+    /**
+     * OP's a player
+     * @param playerName Player to OP
+     * @return If successful
+     */
     @Action(
             aliases = {"op", "opPlayer"})
     public boolean op(final String playerName) {
@@ -378,6 +435,12 @@ public class PlayerActions {
         return true;
     }
 
+    /**
+     * Preforms a command as a player
+     * @param playerName Player to preform the command as
+     * @param command Command to preform, without the '/' in front of it
+     * @return If successful
+     */
     @Action(
             aliases = {"performCommand", "playerCommand"},
             schedulable = false)
@@ -389,6 +452,11 @@ public class PlayerActions {
         return false;
     }
 
+    /**
+     * Removes a player from the whitelist
+     * @param playerName Player to remove from the whitelist
+     * @return If successful
+     */
     @Action(
             aliases = {"removeFromWhitelist", "whitelistRemove"})
     public boolean removeFromWhitelist(final String playerName) {
@@ -396,175 +464,121 @@ public class PlayerActions {
         return true;
     }
 
+    /**
+     * Removes an item from a players inventory
+     * @param playerName Player to remove the item from
+     * @param id Id of the item to remove
+     * @return If successful
+     */
     @Action(
             aliases = {"removeInventoryItem", "remove"},
             schedulable = false)
     public boolean removeInventoryItem(final String playerName, final int id) {
-        try {
-            Bukkit.getPlayer(playerName).getInventory().removeItem(new ItemStack(id));
+        final Player player = Bukkit.getPlayer(playerName);
+        if (player != null) {
+            player.getInventory().removeItem(new ItemStack(id));
             return true;
-        } catch (final NullPointerException e) {
-            e.printStackTrace();
         }
         return false;
     }
 
+    /**
+     * Sets the food level of a player
+     * @param playerName Player to set the food level of
+     * @param foodLevel New food level of player
+     * @return If successful
+     */
     @Action(
             aliases = {"setFoodLevel", "foodLevel", "food"},
             schedulable = false)
     public boolean setFoodLevel(final String playerName, final int foodLevel) {
         final Player player = Bukkit.getServer().getPlayer(playerName);
-        if (player != null)
-            try {
-                player.setFoodLevel(foodLevel);
-                return true;
-            } catch (final Exception e) {
-                e.printStackTrace();
-            }
+        if (player != null) {
+            player.setFoodLevel(foodLevel);
+            return true;
+        }
         return false;
     }
 
+    /**
+     * Sets the game mode of a player
+     * 0 = Survival
+     * 1 = Creative
+     * @param playerName Player to set the game mode of
+     * @param gameMode Game mode to set
+     * @return If successful
+     */
     @Action(
             aliases = {"setGameMode", "gameMode"},
             schedulable = false)
     public boolean setGameMode(final String playerName, final int gameMode) {
         final Player player = Bukkit.getServer().getPlayer(playerName);
-        if (player != null)
-            try {
-                if (gameMode == 1)
-                    player.setGameMode(GameMode.CREATIVE);
-                else
-                    player.setGameMode(GameMode.SURVIVAL);
-                return true;
-            } catch (final Exception e) {
-                e.printStackTrace();
+        if (player != null) {
+            if (gameMode == 1)
+                player.setGameMode(GameMode.CREATIVE);
+            else
+                player.setGameMode(GameMode.SURVIVAL);
+            return true;
             }
         return false;
     }
 
+    /**
+     * Sets the health of a player
+     * @param playerName Player to set the health of
+     * @param health New health of player
+     * @return If successful
+     */
     @Action(
             aliases = {"setHealth", "health"},
             schedulable = false)
     public boolean setHealth(final String playerName, final int health) {
         final Player player = Bukkit.getServer().getPlayer(playerName);
-        if (player != null)
-            try {
-                player.setHealth(health);
-                return true;
-            } catch (final Exception e) {
-                e.printStackTrace();
-            }
+        if (player != null) {
+            player.setHealth(health);
+            return true;
+            } 
         return false;
     }
 
+    /**
+     * Sets a slot of a players inventory
+     * @param playerName Player to set
+     * @param slotNumber Slot number of the players inventory to set
+     * @param id Id to slot to set
+     * @param amount Amount of slot to set
+     * @param damage Damage of slot to set
+     * @param data Data of slot to set
+     * @return If successful
+     */
     @Action(
             aliases = {"setInventorySlot", "setInventory"},
             schedulable = false)
-    public boolean setInventorySlot(final String playerName, final int slotNumber, final int id, final int amount) {
+    public boolean setInventorySlot(final String playerName, final int slotNumber, final int id, final int amount, final short damage, final byte data) {
         final Player player = Bukkit.getPlayer(playerName);
-        if (player != null)
-            try {
-                final PlayerInventory inventory = player.getInventory();
-                final ItemStack stack = new ItemStack(id, amount);
-                if (slotNumber == 103)
-                    inventory.setHelmet(stack);
-                else if (slotNumber == 102)
-                    inventory.setChestplate(stack);
-                else if (slotNumber == 101)
-                    inventory.setLeggings(stack);
-                else if (slotNumber == 100)
-                    inventory.setBoots(stack);
-                else
-                    inventory.setItem(slotNumber, stack);
-                return true;
-            } catch (final Exception e) {
-                e.printStackTrace();
+        if (player != null) {
+            final PlayerInventory inventory = player.getInventory();
+            final ItemStack stack = new ItemStack(id, amount, damage, data);
+            if (slotNumber == 103)
+                inventory.setHelmet(stack);
+            else if (slotNumber == 102)
+                inventory.setChestplate(stack);
+            else if (slotNumber == 101)
+                inventory.setLeggings(stack);
+            else if (slotNumber == 100)
+                inventory.setBoots(stack);
+            else
+                inventory.setItem(slotNumber, stack);
+            return true;
             }
         return false;
     }
 
-    @Action(
-            aliases = {"setInventorySlotWithDamage", "setInventoryDamage"},
-            schedulable = false)
-    public boolean setInventorySlotWithDamage(final String playerName, final int slotNumber, final int id,
-            final int amount, final short damage) {
-        final Player player = Bukkit.getPlayer(playerName);
-        if (player != null)
-            try {
-                final PlayerInventory inventory = player.getInventory();
-                final ItemStack stack = new ItemStack(id, amount, damage);
-                if (slotNumber == 103)
-                    inventory.setHelmet(stack);
-                else if (slotNumber == 102)
-                    inventory.setChestplate(stack);
-                else if (slotNumber == 101)
-                    inventory.setLeggings(stack);
-                else if (slotNumber == 100)
-                    inventory.setBoots(stack);
-                else
-                    inventory.setItem(slotNumber, stack);
-                return true;
-            } catch (final Exception e) {
-                e.printStackTrace();
-            }
-        return false;
-    }
-
-    @Action(
-            aliases = {"setInventorySlotWithDataAndDamage", "setInventoryDataDamage"},
-            schedulable = false)
-    public boolean setInventorySlotWithDataAndDamage(final String playerName, final int slotNumber, final int id,
-            final int amount, final int data, final short damage) {
-        final Player player = Bukkit.getPlayer(playerName);
-        if (player != null)
-            try {
-                final PlayerInventory inventory = player.getInventory();
-                final ItemStack stack = new MaterialData(id, (byte) data).toItemStack(amount);
-                stack.setDurability(damage);
-                if (slotNumber == 103)
-                    inventory.setHelmet(stack);
-                else if (slotNumber == 102)
-                    inventory.setChestplate(stack);
-                else if (slotNumber == 101)
-                    inventory.setLeggings(stack);
-                else if (slotNumber == 100)
-                    inventory.setBoots(stack);
-                else
-                    inventory.setItem(slotNumber, stack);
-                return true;
-            } catch (final Exception e) {
-                e.printStackTrace();
-            }
-        return false;
-    }
-
-    @Action(
-            aliases = {"setPlayerInventorySlotWithData", "setInventoryData"},
-            schedulable = false)
-    public boolean setPlayerInventorySlotWithData(final String playerName, final int slotNumber, final int id,
-            final int amount, final int data) {
-        final Player player = Bukkit.getPlayer(playerName);
-        if (player != null)
-            try {
-                final PlayerInventory inventory = player.getInventory();
-                final ItemStack stack = new MaterialData(id, (byte) data).toItemStack(amount);
-                if (slotNumber == 103)
-                    inventory.setHelmet(stack);
-                else if (slotNumber == 102)
-                    inventory.setChestplate(stack);
-                else if (slotNumber == 101)
-                    inventory.setLeggings(stack);
-                else if (slotNumber == 100)
-                    inventory.setBoots(stack);
-                else
-                    inventory.setItem(slotNumber, stack);
-                return true;
-            } catch (final Exception e) {
-                e.printStackTrace();
-            }
-        return false;
-    }
-
+    /**
+     * Throws a snowball as a player
+     * @param playerName Player to throw the snowball as
+     * @return If successful
+     */
     @Action(
             aliases = {"throwSnowball", "snowball"},
             schedulable = false)
@@ -577,22 +591,34 @@ public class PlayerActions {
         return false;
     }
 
+    /**
+     * Teleports a player to a location
+     * @param playerName Player to teleport
+     * @param worldName World to teleport the player to
+     * @param x X to teleport the player too
+     * @param y Y to teleport the player too
+     * @param z Z to teleport the player too
+     * @return If successful
+     */
     @Action(
             aliases = {"teleport"},
             schedulable = false)
     public boolean teleport(final String playerName, final String worldName, final double x, final double y,
             final double z) {
         final Player player = Bukkit.getPlayer(playerName);
-        if (player != null)
-            try {
-                player.teleport(new Location(Bukkit.getWorld(worldName), x, y, z));
-                return true;
-            } catch (final Exception e) {
-                e.printStackTrace();
-            }
+        final World world = Bukkit.getWorld(worldName);
+        if (player != null && world != null) {
+            player.teleport(new Location(world, x, y, z));
+            return true;
+        }
         return false;
     }
 
+    /**
+     * Unbans a player
+     * @param playerName Player to unban
+     * @return If successful
+     */
     @Action(
             aliases = {"unban", "unbanPlayer", "bannedRemove"})
     public boolean unban(final String playerName) {
@@ -600,17 +626,24 @@ public class PlayerActions {
         return true;
     }
 
+    /**
+     * Updates an inventory slot 
+     * @param playerName Player whos inventory is to update
+     * @param slotNumber Slot number of the players inventory to update
+     * @param id Id of the slot to set
+     * @param amount Amount of the slot to set
+     * @param damage Damage of the slot to set
+     * @param data Data of the slot to set
+     * @return If successful
+     */
     @Action(
             aliases = {"updatePlayerInventorySlot", "update"},
             schedulable = false)
-    public boolean updateInventorySlot(final String playerName, final int slotNumber, final int amount) {
-        try {
-            final ItemStack stack = Bukkit.getPlayer(playerName).getInventory().getItem(slotNumber);
-            stack.setAmount(amount);
-            Bukkit.getPlayer(playerName).getInventory().setItem(slotNumber, stack);
+    public boolean updateInventorySlot(final String playerName, final int slotNumber, final int id, final int amount, final short damage, final byte data) {
+        final Player player = Bukkit.getPlayer(playerName);
+        if (player != null) {
+            player.getInventory().setItem(slotNumber, new ItemStack(id, amount, damage, data));
             return true;
-        } catch (final NullPointerException e) {
-            e.printStackTrace();
         }
         return false;
     }
