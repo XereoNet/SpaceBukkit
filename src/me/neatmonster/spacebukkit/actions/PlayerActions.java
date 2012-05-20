@@ -341,7 +341,7 @@ public class PlayerActions {
         if (player != null) {
             final EntityDamageEvent event = new EntityDamageEvent(player, EntityDamageEvent.DamageCause.SUICIDE, 1000);
             Bukkit.getPluginManager().callEvent(event);
-            player.damage(event.getDamage());
+            player.setHealth(0);
             return true;
         }
         return false;
