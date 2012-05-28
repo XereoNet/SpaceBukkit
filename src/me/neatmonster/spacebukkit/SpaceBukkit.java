@@ -65,7 +65,6 @@ public class SpaceBukkit extends JavaPlugin {
     public String               logTag = "[SpaceBukkit] ";
 
     private final Timer         timer  = new Timer();
-    private PermissionsManager  pManager;
 
     private EventDispatcher     edt;
     private ToolkitEventHandler eventHandler;
@@ -77,7 +76,6 @@ public class SpaceBukkit extends JavaPlugin {
     @Override
     public void onDisable() {
         performanceMonitor.infanticide();
-        pManager = null;
         timer.cancel();
         pingListener.shutdown();
         try {
@@ -171,18 +169,6 @@ public class SpaceBukkit extends JavaPlugin {
      */
     public ToolkitEventHandler getEventHandler() {
         return eventHandler;
-    }
-
-    /**
-     * Gets the Permissions Manager
-     * @return permissions manager
-     */
-    public PermissionsManager getPermissionsManager() {
-        if(pManager == null) {
-            pManager = new PermissionsManager(PermissionsManager.findConnector());
-        }
-
-        return pManager;
     }
 
     /**
