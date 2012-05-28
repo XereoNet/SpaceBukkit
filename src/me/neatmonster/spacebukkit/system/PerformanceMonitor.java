@@ -24,6 +24,9 @@ import org.bukkit.World;
 import com.jezhumble.javasysmon.CpuTimes;
 import com.jezhumble.javasysmon.JavaSysMon;
 
+/**
+ * Performance Monitor
+ */
 public class PerformanceMonitor extends TimerTask {
     private double      clockRate = 0D;
     private JavaSysMon  monitor   = null;
@@ -32,6 +35,9 @@ public class PerformanceMonitor extends TimerTask {
     private CpuTimes    previous  = null;
     private final World world     = Bukkit.getWorlds().get(0);
 
+    /**
+     * Creates a new Performance Monitor
+     */
     public PerformanceMonitor() {
         monitor = new JavaSysMon();
         if (!monitor.supportedPlatform()) {
@@ -42,63 +48,102 @@ public class PerformanceMonitor extends TimerTask {
             now = monitor.cpuTimes();
     }
 
+    /**
+     * Gets the clock rate of the CPU
+     * @return Clock rate
+     */
     public double getClockRate() {
         return clockRate;
     }
 
+    /**
+     * Gets the CPU Frequency
+     * @return CPU Frequency
+     */
     public long getCpuFrequency() {
         if (monitor != null)
             return monitor.cpuFrequencyInHz();
         return 0L;
     }
 
+    /**
+     * Gets the current CPU usage
+     * @return CPU Usage
+     */
     public float getCpuUsage() {
         if (monitor != null && previous != null && now != null)
             return now.getCpuUsage(previous);
         return 0F;
     }
 
+    /**
+     * Gets the number of CPU's
+     * @return Number of CPU's
+     */
     public int getNumCpus() {
         if (monitor != null)
             return monitor.numCpus();
         return 0;
     }
 
+    /**
+     * Gets the name of the OS
+     * @return OS Name
+     */
     public String getOsName() {
         if (monitor != null)
             return monitor.osName();
         return "";
     }
 
+    /**
+     * Gets how much Physical Memory is Free
+     * @return Physical Memory free
+     */
     public long getPhysicalMemoryFree() {
         if (monitor != null)
             return monitor.physical().getFreeBytes();
         return 0L;
     }
 
+    /**
+     * Gets how much Physical Memory there is total
+     * @return Physical Memory total
+     */
     public long getPhysicalMemoryTotal() {
         if (monitor != null)
             return monitor.physical().getTotalBytes();
         return 0L;
     }
 
+    /**
+     * Gets the PID of the server
+     * @return PID
+     */
     public int getPid() {
         if (monitor != null)
             return monitor.currentPid();
         return 0;
     }
 
+    /**
+     * Gets the Uptime of the server, in seconds
+     * @return Uptime of the server
+     */
     public long getUptime() {
         if (monitor != null)
             return monitor.uptimeInSeconds();
         return 0L;
     }
 
+    /**
+     * Stops the monitor
+     */
     public void infanticide() {
         if (monitor != null)
             monitor.infanticide();
     }
-
+    
     @Override
     public void run() {
         final long startMillis = System.currentTimeMillis();

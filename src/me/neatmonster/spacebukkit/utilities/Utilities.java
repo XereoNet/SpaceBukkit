@@ -28,9 +28,21 @@ import me.neatmonster.spacebukkit.SpaceBukkit;
 
 import org.bukkit.ChatColor;
 
+/**
+ * Various Utility methods
+ */
 public class Utilities {
+    /**
+     * Logger that handles any output to the console
+     */
     public static Logger logger = Logger.getLogger("Minecraft");
 
+    /**
+     * Adds the HTTP header to a string
+     * @param string String to add to
+     * @return String with the header
+     * @throws UnsupportedEncodingException If the encoding is not UTF-8
+     */
     public static String addHeader(final String string) throws UnsupportedEncodingException {
         String finishedString = "";
         String byteLengthOfFinishedString = "";
@@ -53,6 +65,11 @@ public class Utilities {
         return finishedString;
     }
 
+    /**
+     * Converts a String from text colors to color
+     * @param message Message to color
+     * @return String with color codes
+     */
     public static String color(String message) {
         int index = 0;
         while (true) {
@@ -101,6 +118,12 @@ public class Utilities {
         return message;
     }
 
+    /**
+     * Encrypts a string with 
+     * @param string String to encrypt
+     * @return String encrypted with hex
+     * @throws NoSuchAlgorithmException If SHA-256 or UTF-8 is not supported
+     */
     public static String crypt(final String string) throws NoSuchAlgorithmException {
         final MessageDigest digest = MessageDigest.getInstance("SHA-256");
         digest.reset();
@@ -121,6 +144,11 @@ public class Utilities {
         return "UnsupportedEncodingException";
     }
 
+    /**
+     * Formats time from long to a readable String
+     * @param time Raw time input
+     * @return Readable time
+     */
     public static String formatTime(final long time) {
         final int hours = (int) ((time / 1000 + 8) % 24);
         final int minutes = (int) (60 * (time % 1000) / 1000);
@@ -128,6 +156,12 @@ public class Utilities {
                 hours < 12 ? "am" : "pm");
     }
 
+    /**
+     * Sends a method to the panel from the plugin
+     * @param method Method to send
+     * @param arguments Arguments to that method
+     * @return Result of the method
+     */
     public static String sendMethod(final String method, final String arguments) {
         try {
             final URL url = new URL("http://localhost:" + SpaceBukkit.getInstance().rPort + "/call?method=" + method
@@ -160,6 +194,11 @@ public class Utilities {
         return null;
     }
 
+    /**
+     * Strips a string of any color codes
+     * @param string String to strip
+     * @return String without color codes
+     */
     public static String stripColor(String string) {
         string = ChatColor.stripColor(string);
         int index = 0;

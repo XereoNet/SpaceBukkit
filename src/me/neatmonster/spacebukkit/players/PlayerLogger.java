@@ -21,6 +21,9 @@ import java.util.TreeMap;
 
 import me.neatmonster.spacebukkit.utilities.PropertiesFile;
 
+/**
+ * Stores information about Player's actions
+ */
 public class PlayerLogger {
     private static TreeMap<Long, String> chats    = new TreeMap<Long, String>();
     private static TreeMap<Long, String> joins    = new TreeMap<Long, String>();
@@ -29,6 +32,11 @@ public class PlayerLogger {
     private static TreeMap<Long, String> messages = new TreeMap<Long, String>();
     private static TreeMap<Long, String> quits    = new TreeMap<Long, String>();
 
+    /**
+     * Adds a chat to the cache
+     * @param playerName Player to add
+     * @param message Message to add
+     */
     public static void addPlayerChat(final String playerName, final String message) {
         if (chats.keySet().size() > 199)
             cleanPlayersChats();
@@ -37,6 +45,10 @@ public class PlayerLogger {
         messages.put(time, message);
     }
 
+    /**
+     * Adds a join to the cache
+     * @param playerName Player to add
+     */
     public static void addPlayerJoin(final String playerName) {
         lastJoin = System.currentTimeMillis();
         if (joins.keySet().size() > 199)
@@ -44,6 +56,10 @@ public class PlayerLogger {
         joins.put(System.currentTimeMillis(), playerName);
     }
 
+    /**
+     * Adds a quit to the cache
+     * @param playerName Player to add
+     */
     public static void addPlayerQuit(final String playerName) {
         lastQuit = System.currentTimeMillis();
         if (quits.keySet().size() > 199)
@@ -51,6 +67,9 @@ public class PlayerLogger {
         quits.put(System.currentTimeMillis(), playerName);
     }
 
+    /**
+     * Clears all the player chats
+     */
     public static void cleanPlayersChats() {
         for (int x = chats.size() - 199; x > 0; x--) {
             chats.remove(chats.firstKey());
@@ -58,16 +77,27 @@ public class PlayerLogger {
         }
     }
 
+    /**
+     * Clears all the player joins
+     */
     public static void cleanPlayersJoins() {
         for (int x = joins.size() - 199; x > 0; x--)
             joins.remove(joins.firstKey());
     }
 
+    /**
+     * Clears all the player quits
+     */
     public static void cleanPlayersQuits() {
         for (int x = quits.size() - 199; x > 0; x--)
             quits.remove(quits.firstKey());
     }
 
+    /**
+     * Gets the case of a player as assigned by the panel
+     * @param playerName Player to get
+     * @return Modified name of the player
+     */
     public static String getCase(final String playerName) {
         try {
             final PropertiesFile propertiesFile = new PropertiesFile(
@@ -83,14 +113,27 @@ public class PlayerLogger {
         return playerName;
     }
 
+    /**
+     * Gets the last time a player joined the server
+     * @return Last time a player joined
+     */
     public static long getLastJoin() {
         return lastJoin;
     }
 
+    /**
+     * Gets the last time a player quit the server
+     * @return Last time a player quit
+     */
     public static long getLastQuit() {
         return lastQuit;
     }
 
+    /**
+     * Gets a map of player chats with a limit
+     * @param limit Number of chats to include
+     * @return Map of player chats
+     */
     public static Map<Long, String> getPlayersChats(final int limit) {
         final TreeMap<Long, String> results = new TreeMap<Long, String>();
         int x = 0;
@@ -102,6 +145,11 @@ public class PlayerLogger {
         return results;
     }
 
+    /**
+     * Gets a map of player joins with a limit
+     * @param limit Number of joins to include
+     * @return Map of player joins
+     */
     public static Map<Long, String> getPlayersJoins(final int limit) {
         final TreeMap<Long, String> results = new TreeMap<Long, String>();
         int x = 0;
@@ -113,6 +161,11 @@ public class PlayerLogger {
         return results;
     }
 
+    /**
+     * Gets a map of player quits with a limit
+     * @param limit Number of quits to include
+     * @return Map of player quits
+     */
     public static Map<Long, String> getPlayersQuits(final int limit) {
         final TreeMap<Long, String> results = new TreeMap<Long, String>();
         int x = 0;
@@ -124,6 +177,10 @@ public class PlayerLogger {
         return results;
     }
 
+    /**
+     * Sets the case of a player
+     * @param playerName Player's new case
+     */
     public static void setCase(final String playerName) {
         try {
             final PropertiesFile propertiesFile = new PropertiesFile(

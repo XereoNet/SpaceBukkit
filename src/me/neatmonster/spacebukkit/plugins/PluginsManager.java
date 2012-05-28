@@ -24,10 +24,18 @@ import org.bukkit.Bukkit;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.util.config.Configuration;
 
+/**
+ * Manages Plugins and interacts with BukGet
+ */
 @SuppressWarnings("deprecation")
 public class PluginsManager {
     public static List<String> pluginsNames = new ArrayList<String>();
 
+    /**
+     * Gets the Jar of a plugin
+     * @param plugin
+     * @return
+     */
     public static File getJAR(final Plugin plugin) {
         Class<?> currentClass = plugin.getClass();
         while (!currentClass.getSimpleName().equalsIgnoreCase("JavaPlugin"))
@@ -52,6 +60,9 @@ public class PluginsManager {
         return null;
     }
 
+    /**
+     * Creates a new PluginsManager
+     */
     public PluginsManager() {
         new Thread(new PluginsRequester()).start();
         final Configuration configuration = new Configuration(new File("SpaceModule" + File.separator + "SpaceBukkit",
@@ -66,6 +77,11 @@ public class PluginsManager {
         configuration.save();
     }
 
+    /**
+     * Checks if the manager knows a plugins JAR location
+     * @param pluginName Plugin to check
+     * @return If the manager knows where a plugins JAR is
+     */
     public boolean contains(String pluginName) {
         pluginName = pluginName.toLowerCase();
         if (pluginsNames.contains(pluginName))
@@ -76,6 +92,18 @@ public class PluginsManager {
             return true;
         if (pluginsNames.contains(pluginName.replace(" ", "-")))
             return true;
+        Plugin plugin = Bukkit.getPluginManager().getPlugin(pluginName);
+        if (plugin != null) {
+            final Configuration configuration = new Configuration(new File("SpaceModule" + File.separator + "SpaceBukkit",
+                    "jars.yml"));
+            configuration.load();
+            final File jar = getJAR(plugin);
+            if (jar != null)
+                configuration.setProperty(plugin.getDescription().getName().toLowerCase().replace(" ", ""),
+                        jar.getName());
+            configuration.save();
+            return true;
+        }
         return false;
     }
 }
