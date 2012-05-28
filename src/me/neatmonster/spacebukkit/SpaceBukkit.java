@@ -65,6 +65,7 @@ public class SpaceBukkit extends JavaPlugin {
 
     private EventDispatcher     edt;
     private ToolkitEventHandler eventHandler;
+    private PingListener pingListener;
 
     /**
      * {@inheritDoc}
@@ -74,6 +75,7 @@ public class SpaceBukkit extends JavaPlugin {
         performanceMonitor.infanticide();
         pManager = null;
         timer.cancel();
+        pingListener.shutdown();
         try {
             if (panelListener != null)
                 panelListener.stopServer();
@@ -138,6 +140,8 @@ public class SpaceBukkit extends JavaPlugin {
         actionsManager.register(SystemActions.class);
         panelListener = new PanelListener();
         performanceMonitor = new PerformanceMonitor();
+        pingListener = new PingListener();
+        pingListener.startup();
         timer.scheduleAtFixedRate(performanceMonitor, 0L, 1000L);
         logger.info("----------------------------------------------------------");
         logger.info("|        SpaceBukkit version "
