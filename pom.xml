@@ -78,7 +78,7 @@
         <dependency>
             <groupId>org.bukkit</groupId>
             <artifactId>craftbukkit</artifactId>
-            <version>1.1-R6-SNAPSHOT</version>
+            <version>1.2.5-R3.1-SNAPSHOT</version>
             <scope>provided</scope>
         </dependency>
 
@@ -97,9 +97,9 @@
         </dependency>
 
         <dependency>
-            <groupId>ru.tehkode</groupId>
-            <artifactId>PermissionsEx</artifactId>
-            <version>1.19.2</version>
+            <groupId>net.milkbowl.vault</groupId>
+            <artifactId>Vault</artifactId>
+            <version>1.2.9-SNAPSHOT</version>
             <scope>compile</scope>
         </dependency>
     </dependencies>
