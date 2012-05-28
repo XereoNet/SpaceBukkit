@@ -1,0 +1,20 @@
+# Eclipse
+/.classpath
+/.project
+/.settings
+
+# Netbeans
+/nbproject
+
+# Maven
+/build.xml
+/target
+
+# Mac files
+/.DS_Store
+
+# Intellij
+*.iml
+*.ipr
+*.iws
+.idea/

@@ -32,6 +32,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.logging.Logger;
 
+import me.neatmonster.spacebukkit.SpaceBukkit;
+
 /**
  * Used for accessing and creating .[properties] files, reads them as utf-8, saves as utf-8.
  * Internationalization is key importance especially for character codes.
@@ -40,8 +42,6 @@ import java.util.logging.Logger;
  * @version 1.0.4, %G%
  */
 public final class PropertiesFile {
-
-    private static final Logger       log   = Logger.getLogger("Minecraft");
     private final String              fileName;
     private final List<String>        lines = new ArrayList<String>();
     private final Map<String, String> props = new HashMap<String, String>();
@@ -59,7 +59,7 @@ public final class PropertiesFile {
             try {
                 load();
             } catch (final IOException ex) {
-                log.severe("[PropertiesFile] Unable to load " + fileName + "!");
+                SpaceBukkit.getInstance().getLogger().severe("[PropertiesFile] Unable to load " + fileName + "!");
             }
         else
             save();
@@ -575,14 +575,14 @@ public final class PropertiesFile {
         try {
             os = new FileOutputStream(new File(fileName));
         } catch (final FileNotFoundException ex) {
-            log.severe("[PropertiesFile] Unable to open " + fileName + "!");
+            SpaceBukkit.getInstance().getLogger().severe("[PropertiesFile] Unable to open " + fileName + "!");
         }
 
         PrintStream ps = null;
         try {
             ps = new PrintStream(os, true, "UTF-8");
         } catch (final UnsupportedEncodingException ex) {
-            log.severe("[PropertiesFile] Unable to write to " + fileName + "!");
+            SpaceBukkit.getInstance().getLogger().severe("[PropertiesFile] Unable to write to " + fileName + "!");
         }
 
         // Keep track of properties that were set
@@ -634,7 +634,7 @@ public final class PropertiesFile {
             lines.clear();
             load();
         } catch (final IOException ex) {
-            log.severe("[PropertiesFile] Unable to load " + fileName + "!");
+            SpaceBukkit.getInstance().getLogger().severe("[PropertiesFile] Unable to load " + fileName + "!");
         }
     }
 
