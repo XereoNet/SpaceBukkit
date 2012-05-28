@@ -22,7 +22,6 @@ import java.net.URL;
 import java.net.URLConnection;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import java.util.logging.Logger;
 
 import me.neatmonster.spacebukkit.SpaceBukkit;
 
@@ -32,10 +31,6 @@ import org.bukkit.ChatColor;
  * Various Utility methods
  */
 public class Utilities {
-    /**
-     * Logger that handles any output to the console
-     */
-    public static Logger logger = Logger.getLogger("Minecraft");
 
     /**
      * Adds the HTTP header to a string
@@ -175,15 +170,15 @@ public class Utilities {
             bufferedReader.close();
             return stringBuffer.toString();
         } catch (final ConnectException e) {
-            logger.severe("----------------------------------------------------------");
-            logger.severe("| SpaceRTK cannot be reached, please make sure you have  |");
-            logger.severe("| RemoteToolkit installed, SpaceRTK placed in /toolkit   |");
-            logger.severe("| /modules. Otherwise report this issue on our issues    |");
-            logger.severe("| tracker (http://bit.ly/spacebukkitissues).             |");
-            logger.severe("----------------------------------------------------------");
+            SpaceBukkit.getInstance().getLogger().severe("----------------------------------------------------------");
+            SpaceBukkit.getInstance().getLogger().severe("| SpaceRTK cannot be reached, please make sure you have  |");
+            SpaceBukkit.getInstance().getLogger().severe("| RemoteToolkit installed, SpaceRTK placed in /toolkit   |");
+            SpaceBukkit.getInstance().getLogger().severe("| /modules. Otherwise report this issue on our issues    |");
+            SpaceBukkit.getInstance().getLogger().severe("| tracker (http://bit.ly/spacebukkitissues).             |");
+            SpaceBukkit.getInstance().getLogger().severe("----------------------------------------------------------");
             e.printStackTrace();
             try {
-                logger.severe("http://localhost:" + SpaceBukkit.getInstance().rPort + "/call?method=" + method
+                SpaceBukkit.getInstance().getLogger().severe("http://localhost:" + SpaceBukkit.getInstance().rPort + "/call?method=" + method
                         + "&args=" + arguments + "&key=" + Utilities.crypt(SpaceBukkit.getInstance().salt));
             } catch (final NoSuchAlgorithmException e_) {
                 e_.printStackTrace();

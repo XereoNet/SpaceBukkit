@@ -15,6 +15,7 @@
 package me.neatmonster.spacebukkit;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.Timer;
 import java.util.UUID;
 import java.util.logging.Logger;
@@ -28,10 +29,12 @@ import me.neatmonster.spacebukkit.players.SBListener;
 import me.neatmonster.spacebukkit.plugins.PluginsManager;
 import me.neatmonster.spacebukkit.system.PerformanceMonitor;
 import me.neatmonster.spacebukkit.utilities.PermissionsManager;
+import me.neatmonster.spacemodule.SpaceModule;
 import me.neatmonster.spacemodule.api.ActionsManager;
 import me.neatmonster.spacertk.SpaceRTK;
 
 import org.bukkit.Bukkit;
+import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.util.config.Configuration;
 
@@ -60,8 +63,7 @@ public class SpaceBukkit extends JavaPlugin {
     public PanelListener        panelListener;
     public PerformanceMonitor   performanceMonitor;
 
-    private Configuration       configuration;
-    public Logger               logger = Logger.getLogger("Minecraft");
+    private YamlConfiguration   configuration;
     public String               logTag = "[SpaceBukkit] ";
 
     private final Timer         timer  = new Timer();
@@ -82,16 +84,16 @@ public class SpaceBukkit extends JavaPlugin {
             if (panelListener != null)
                 panelListener.stopServer();
         } catch (final Exception e) {
-            logger.severe(logTag + e.getMessage());
+            getLogger().severe(logTag + e.getMessage());
         }
         edt.setRunning(false);
         synchronized (edt) {
             edt.notifyAll();
         }
         eventHandler.setEnabled(false);
-        logger.info("----------------------------------------------------------");
-        logger.info("|             SpaceBukkit is now disabled!               |");
-        logger.info("----------------------------------------------------------");
+        getLogger().info("----------------------------------------------------------");
+        getLogger().info("|             SpaceBukkit is now disabled!               |");
+        getLogger().info("----------------------------------------------------------");
     }
 
     /**
@@ -100,20 +102,23 @@ public class SpaceBukkit extends JavaPlugin {
     @Override
     public void onEnable() {
         spacebukkit = this;
-        configuration = new Configuration(new File("SpaceModule", "configuration.yml"));
-        configuration.load();
+        configuration = YamlConfiguration.loadConfiguration(SpaceModule.CONFIGURATION);
         salt = configuration.getString("General.Salt", "<default>");
         if (salt.equals("<default>")) {
             salt = UUID.randomUUID().toString().replaceAll("-", "").toUpperCase();
-            configuration.setProperty("General.Salt", salt);
+            configuration.set("General.Salt", salt);
         }
-        configuration.setProperty("General.WorldContainer", Bukkit.getWorldContainer().getPath());
+        configuration.set("General.WorldContainer", Bukkit.getWorldContainer().getPath());
         port = configuration.getInt("SpaceBukkit.Port", 2011);
         rPort = configuration.getInt("SpaceRTK.Port", 2012);
         maxJoins = configuration.getInt("SpaceBukkit.maxJoins", 199);
         maxMessages = configuration.getInt("SpaceBukkit.maxMessages", 199);
         maxQuits = configuration.getInt("SpaceBukkit.maxQuits", 199);
-        configuration.save();
+        try {
+            configuration.save(SpaceModule.CONFIGURATION);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
         if(edt == null)
             edt = new EventDispatcher();
@@ -148,11 +153,11 @@ public class SpaceBukkit extends JavaPlugin {
         pingListener = new PingListener();
         pingListener.startup();
         timer.scheduleAtFixedRate(performanceMonitor, 0L, 1000L);
-        logger.info("----------------------------------------------------------");
-        logger.info("|        SpaceBukkit version "
-                + Bukkit.getPluginManager().getPlugin("SpaceBukkit").getDescription().getVersion()
+        getLogger().info("----------------------------------------------------------");
+        getLogger().info("|        SpaceBukkit version "
+                + this.getDescription().getVersion()
                 + " is now enabled!         |");
-        logger.info("----------------------------------------------------------");
+        getLogger().info("----------------------------------------------------------");
     }
 
     /**
