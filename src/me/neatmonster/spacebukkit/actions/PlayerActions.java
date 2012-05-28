@@ -123,7 +123,7 @@ public class PlayerActions {
     public boolean clearInventorySlot(final String playerName, final int slotNumber) {
         final Player player = Bukkit.getPlayer(playerName);
         if (player != null) {
-            final PlayerInventory inventory = Bukkit.getPlayer(playerName).getInventory();
+            final PlayerInventory inventory = player.getInventory();
             final int size = inventory.getSize();
             if (slotNumber == 103)
                 inventory.clear(size + 3);
@@ -184,18 +184,21 @@ public class PlayerActions {
     public LinkedHashMap<Integer, Map<String, Object>> getInventory(final String playerName) {
         final LinkedHashMap<Integer, Map<String, Object>> playerInventory = new LinkedHashMap<Integer, Map<String, Object>>();
         final Player player = Bukkit.getPlayer(playerName);
-        if (player == null)
+        if (player == null) {
             return new LinkedHashMap<Integer, Map<String, Object>>();
-        for (int i = 0; i < player.getInventory().getSize(); i++)
-            playerInventory.put(i, player.getInventory().getItem(i) == null ? new HashMap<String, Object>() : player
+        }
+        PlayerInventory inv = player.getInventory();
+        for (int i = 0; i < player.getInventory().getSize(); i++) {
+            playerInventory.put(i, inv.getItem(i) == null ? new HashMap<String, Object>() : player
                     .getInventory().getItem(i).serialize());
-        playerInventory.put(100, player.getInventory().getBoots() == null ? new HashMap<String, Object>() : player
+        }
+        playerInventory.put(100, inv.getBoots() == null ? new HashMap<String, Object>() : player
                 .getInventory().getBoots().serialize());
-        playerInventory.put(101, player.getInventory().getLeggings() == null ? new HashMap<String, Object>() : player
+        playerInventory.put(101, inv.getLeggings() == null ? new HashMap<String, Object>() : player
                 .getInventory().getLeggings().serialize());
-        playerInventory.put(102, player.getInventory().getChestplate() == null ? new HashMap<String, Object>() : player
+        playerInventory.put(102, inv.getChestplate() == null ? new HashMap<String, Object>() : player
                 .getInventory().getChestplate().serialize());
-        playerInventory.put(103, player.getInventory().getHelmet() == null ? new HashMap<String, Object>() : player
+        playerInventory.put(103, inv.getHelmet() == null ? new HashMap<String, Object>() : player
                 .getInventory().getHelmet().serialize());
         return playerInventory;
     }
@@ -306,15 +309,16 @@ public class PlayerActions {
         if (player != null) {
             final ItemStack stack = new ItemStack(aID, aAmount, (short) 0, data);
             final PlayerInventory inventory = player.getInventory();
-            if (stack.getAmount() <= 64)
+            final int maxStackSize = stack.getMaxStackSize();
+            if (stack.getAmount() <= maxStackSize)
                 inventory.addItem(stack);
                 final int amount = stack.getAmount();
-                final int quotient = amount / 64;
-                final int remainder = amount % 64;
+                final int quotient = amount / maxStackSize;
+                final int remainder = amount % maxStackSize;
                 for (int i = 0; i < quotient; i++)
-                    inventory.addItem(new ItemStack(id, 64, (short) 0, data));
+                    inventory.addItem(new ItemStack(aID, maxStackSize, (short) 0, data));
                 if (remainder > 0)
-                    inventory.addItem(new ItemStack(id, remainder, (short) 0, data));
+                    inventory.addItem(new ItemStack(aID, remainder, (short) 0, data));
                 return true;
             }
         return false;
@@ -336,7 +340,7 @@ public class PlayerActions {
             final ItemStack stack = new ItemStack(id, amount, (short) 0, data);
             player.getWorld().dropItemNaturally(player.getLocation(), stack);
             return true;
-            }
+        }
         return false;
     }
 
