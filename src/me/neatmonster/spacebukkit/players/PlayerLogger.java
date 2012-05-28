@@ -19,6 +19,7 @@ import java.io.IOException;
 import java.util.Map;
 import java.util.TreeMap;
 
+import me.neatmonster.spacebukkit.SpaceBukkit;
 import me.neatmonster.spacebukkit.utilities.PropertiesFile;
 
 /**
@@ -38,7 +39,7 @@ public class PlayerLogger {
      * @param message Message to add
      */
     public static void addPlayerChat(final String playerName, final String message) {
-        if (chats.keySet().size() > 199)
+        if (chats.keySet().size() > SpaceBukkit.getInstance().maxMessages)
             cleanPlayersChats();
         final long time = System.currentTimeMillis();
         chats.put(time, playerName);
@@ -51,7 +52,7 @@ public class PlayerLogger {
      */
     public static void addPlayerJoin(final String playerName) {
         lastJoin = System.currentTimeMillis();
-        if (joins.keySet().size() > 199)
+        if (joins.keySet().size() > SpaceBukkit.getInstance().maxJoins)
             cleanPlayersJoins();
         joins.put(System.currentTimeMillis(), playerName);
     }
@@ -62,7 +63,7 @@ public class PlayerLogger {
      */
     public static void addPlayerQuit(final String playerName) {
         lastQuit = System.currentTimeMillis();
-        if (quits.keySet().size() > 199)
+        if (quits.keySet().size() > SpaceBukkit.getInstance().maxQuits)
             cleanPlayersQuits();
         quits.put(System.currentTimeMillis(), playerName);
     }
@@ -71,7 +72,7 @@ public class PlayerLogger {
      * Clears all the player chats
      */
     public static void cleanPlayersChats() {
-        for (int x = chats.size() - 199; x > 0; x--) {
+        for (int x = chats.size() - SpaceBukkit.getInstance().maxMessages; x > 0; x--) {
             chats.remove(chats.firstKey());
             messages.remove(messages.firstKey());
         }
@@ -81,7 +82,7 @@ public class PlayerLogger {
      * Clears all the player joins
      */
     public static void cleanPlayersJoins() {
-        for (int x = joins.size() - 199; x > 0; x--)
+        for (int x = joins.size() - SpaceBukkit.getInstance().maxJoins; x > 0; x--)
             joins.remove(joins.firstKey());
     }
 
@@ -89,7 +90,7 @@ public class PlayerLogger {
      * Clears all the player quits
      */
     public static void cleanPlayersQuits() {
-        for (int x = quits.size() - 199; x > 0; x--)
+        for (int x = quits.size() - SpaceBukkit.getInstance().maxQuits; x > 0; x--)
             quits.remove(quits.firstKey());
     }
 

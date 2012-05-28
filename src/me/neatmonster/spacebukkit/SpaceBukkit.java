@@ -50,6 +50,10 @@ public class SpaceBukkit extends JavaPlugin {
     public int                  port;
     public int                  rPort;
     public String               salt;
+    
+    public int                  maxJoins;
+    public int                  maxMessages;
+    public int                  maxQuits;
 
     public PluginsManager       pluginsManager;
     public ActionsManager       actionsManager;
@@ -108,6 +112,9 @@ public class SpaceBukkit extends JavaPlugin {
         configuration.setProperty("General.WorldContainer", Bukkit.getWorldContainer().getPath());
         port = configuration.getInt("SpaceBukkit.Port", 2011);
         rPort = configuration.getInt("SpaceRTK.Port", 2012);
+        maxJoins = configuration.getInt("SpaceBukkit.maxJoins", 199);
+        maxMessages = configuration.getInt("SpaceBukkit.maxMessages", 199);
+        maxQuits = configuration.getInt("SpaceBukkit.maxQuits", 199);
         configuration.save();
 
         if(edt == null)
