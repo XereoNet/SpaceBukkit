@@ -24,6 +24,7 @@ import java.util.List;
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.Plugin;
+import org.bukkit.plugin.java.JavaPlugin;
 
 /**
  * Manages Plugins and interacts with BukGet
@@ -37,12 +38,16 @@ public class PluginsManager {
     /**
      * Gets the Jar of a plugin
      * @param plugin
-     * @return
+     * @return Jar File the plugin's code is contained in
      */
     public static File getJAR(final Plugin plugin) {
+        if (plugin == null) {
+            return null;
+        }
         Class<?> currentClass = plugin.getClass();
-        while (!currentClass.getSimpleName().equalsIgnoreCase("JavaPlugin"))
+        while (JavaPlugin.class.isAssignableFrom(currentClass)) {
             currentClass = currentClass.getSuperclass();
+        }
         try {
             final Class<?>[] methodArgs = {};
             final Method method = currentClass.getDeclaredMethod("getFile", methodArgs);
