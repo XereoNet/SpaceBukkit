@@ -177,12 +177,9 @@ public class SpaceBukkit extends JavaPlugin {
     }
 
     /**
-     * Does...Nothing?
+     * Forces the event handler into the correct state.
      */
     private class EventHandler extends ToolkitEventHandler {
-        /**
-         * Creates a new Event Handler
-         */
         public EventHandler() {
             setEnabled(true);
         }
