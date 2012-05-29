@@ -134,7 +134,7 @@ public class SystemActions {
     @Action(
             aliases = {"getJavaMemoryFree", "memoryFree"})
     public long getJavaMemoryFree() {
-        return Math.round(Runtime.getRuntime().freeMemory() / 1048576);
+        return Math.round((float)Runtime.getRuntime().freeMemory() / 1048576.0f);
     }
 
     /**
@@ -144,7 +144,7 @@ public class SystemActions {
     @Action(
             aliases = {"getJavaMemoryMax", "memoryMax"})
     public long getJavaMemoryMax() {
-        return Math.round(Runtime.getRuntime().maxMemory() / 1048576);
+        return Math.round((float)Runtime.getRuntime().maxMemory() / 1048576.0f);
     }
 
     /**
@@ -154,7 +154,7 @@ public class SystemActions {
     @Action(
             aliases = {"getJavaMemoryTotal", "memoryTotal"})
     public long getJavaMemoryTotal() {
-        return Math.round(Runtime.getRuntime().totalMemory() / 1048576);
+        return Math.round((float)Runtime.getRuntime().totalMemory() / 1048576.0f);
     }
 
     /**
@@ -224,7 +224,7 @@ public class SystemActions {
     @Action(
             aliases = {"getPhysicalMemoryFree", "physicalMemoryFree"})
     public long getPhysicalMemoryFree() {
-        return Math.round(SpaceBukkit.getInstance().performanceMonitor.getPhysicalMemoryFree() / 1048576);
+        return Math.round((float)SpaceBukkit.getInstance().performanceMonitor.getPhysicalMemoryFree() / 1048576.0f);
     }
 
     /**
@@ -234,7 +234,7 @@ public class SystemActions {
     @Action(
             aliases = {"getPhysicalMemoryTotal", "physicalMemoryTotal"})
     public long getPhysicalMemoryTotal() {
-        return Math.round(SpaceBukkit.getInstance().performanceMonitor.getPhysicalMemoryTotal() / 1048576);
+        return Math.round((float)SpaceBukkit.getInstance().performanceMonitor.getPhysicalMemoryTotal() / 1048576.0f);
     }
 
     /**
@@ -244,8 +244,8 @@ public class SystemActions {
     @Action(
             aliases = {"getPhysicalMemoryUsage", "physicalMemoryUsage"})
     public long getPhysicalMemoryUsage() {
-        return Math.round((SpaceBukkit.getInstance().performanceMonitor.getPhysicalMemoryTotal() - SpaceBukkit
-                .getInstance().performanceMonitor.getPhysicalMemoryFree()) / 1048576);
+        return (SpaceBukkit.getInstance().performanceMonitor.getPhysicalMemoryTotal() - SpaceBukkit
+                .getInstance().performanceMonitor.getPhysicalMemoryFree()) / 1048576;
     }
 
     /**

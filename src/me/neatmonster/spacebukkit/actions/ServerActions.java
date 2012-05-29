@@ -37,6 +37,7 @@ import me.neatmonster.spacebukkit.utilities.Utilities;
 import me.neatmonster.spacemodule.api.Action;
 import me.neatmonster.spacemodule.api.UnhandledActionException;
 import net.milkbowl.vault.permission.Permission;
+import net.milkbowl.vault.permission.plugins.Permission_SuperPerms;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -695,7 +696,7 @@ public class ServerActions {
     @Action(
             aliases = {"permissionsAvailable", "permsAvailable"})
     public boolean permissionsAvailable() {
-        return Bukkit.getServicesManager().getRegistration(Permission.class) != null;
+        return !(Bukkit.getServicesManager().getRegistration(Permission.class).getProvider() instanceof Permission_SuperPerms);
     }
 
     /**
