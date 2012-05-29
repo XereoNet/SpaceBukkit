@@ -21,6 +21,8 @@ import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 
+import me.neatmonster.spacebukkit.SpaceBukkit;
+
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.Plugin;
@@ -42,6 +44,7 @@ public class PluginsManager {
      */
     public static File getJAR(final Plugin plugin) {
         if (plugin == null) {
+            SpaceBukkit.getInstance().getLogger().severe("A plugin was null!");
             return null;
         }
         Class<?> currentClass = plugin.getClass();
