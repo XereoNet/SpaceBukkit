@@ -161,11 +161,6 @@ public class PlayerActions {
     @Action(
             aliases = {"getBanned", "banned"})
     public List<String> getBanned() {
-        try {
-            final ServerConfigurationManager scm = ((CraftServer) Bukkit.getServer()).getHandle();
-            final Method method = scm.getClass().getDeclaredMethod("l");
-            method.invoke(scm);
-        } catch (final Exception e) {}
         final List<String> playersNames = new ArrayList<String>();
         for (final OfflinePlayer player : Bukkit.getBannedPlayers())
             playersNames.add(PlayerLogger.getCase(player.getName()));

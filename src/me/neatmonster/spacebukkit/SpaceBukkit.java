@@ -14,21 +14,16 @@
  */
 package me.neatmonster.spacebukkit;
 
-import java.io.File;
 import java.io.IOException;
 import java.util.Timer;
 import java.util.UUID;
-import java.util.logging.Logger;
 
-import com.drdanick.rtoolkit.EventDispatcher;
-import com.drdanick.rtoolkit.event.ToolkitEventHandler;
 import me.neatmonster.spacebukkit.actions.PlayerActions;
 import me.neatmonster.spacebukkit.actions.ServerActions;
 import me.neatmonster.spacebukkit.actions.SystemActions;
 import me.neatmonster.spacebukkit.players.SBListener;
 import me.neatmonster.spacebukkit.plugins.PluginsManager;
 import me.neatmonster.spacebukkit.system.PerformanceMonitor;
-import me.neatmonster.spacebukkit.utilities.PermissionsManager;
 import me.neatmonster.spacemodule.SpaceModule;
 import me.neatmonster.spacemodule.api.ActionsManager;
 import me.neatmonster.spacertk.SpaceRTK;
@@ -36,12 +31,13 @@ import me.neatmonster.spacertk.SpaceRTK;
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
-import org.bukkit.util.config.Configuration;
+
+import com.drdanick.rtoolkit.EventDispatcher;
+import com.drdanick.rtoolkit.event.ToolkitEventHandler;
 
 /**
  * Main class of the Plugin
  */
-@SuppressWarnings("deprecation")
 public class SpaceBukkit extends JavaPlugin {
     public static SpaceRTK     spaceRTK = null;
     private static SpaceBukkit spacebukkit;
@@ -150,7 +146,11 @@ public class SpaceBukkit extends JavaPlugin {
         actionsManager.register(SystemActions.class);
         panelListener = new PanelListener();
         performanceMonitor = new PerformanceMonitor();
-        pingListener = new PingListener();
+        try {
+            pingListener = new PingListener();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         pingListener.startup();
         timer.scheduleAtFixedRate(performanceMonitor, 0L, 1000L);
         getLogger().info("----------------------------------------------------------");

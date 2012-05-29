@@ -15,20 +15,23 @@
 package me.neatmonster.spacebukkit.plugins;
 
 import java.io.File;
+import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 
 import org.bukkit.Bukkit;
+import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.Plugin;
-import org.bukkit.util.config.Configuration;
 
 /**
  * Manages Plugins and interacts with BukGet
  */
-@SuppressWarnings("deprecation")
 public class PluginsManager {
+    public static final File JARS_FILE = new File("SpaceModule" + File.separator + "SpaceBukkit",
+        "jars.yml");
+    
     public static List<String> pluginsNames = new ArrayList<String>();
 
     /**
@@ -65,16 +68,18 @@ public class PluginsManager {
      */
     public PluginsManager() {
         new Thread(new PluginsRequester()).start();
-        final Configuration configuration = new Configuration(new File("SpaceModule" + File.separator + "SpaceBukkit",
-                "jars.yml"));
-        configuration.load();
+        final YamlConfiguration configuration = YamlConfiguration.loadConfiguration(JARS_FILE);
         for (final Plugin plugin : Bukkit.getPluginManager().getPlugins()) {
             final File jar = getJAR(plugin);
             if (jar != null)
-                configuration.setProperty(plugin.getDescription().getName().toLowerCase().replace(" ", ""),
+                configuration.set(plugin.getDescription().getName().toLowerCase().replace(" ", ""),
                         jar.getName());
         }
-        configuration.save();
+        try {
+            configuration.save(JARS_FILE);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     /**
@@ -94,14 +99,16 @@ public class PluginsManager {
             return true;
         Plugin plugin = Bukkit.getPluginManager().getPlugin(pluginName);
         if (plugin != null) {
-            final Configuration configuration = new Configuration(new File("SpaceModule" + File.separator + "SpaceBukkit",
-                    "jars.yml"));
-            configuration.load();
+            final YamlConfiguration configuration = YamlConfiguration.loadConfiguration(JARS_FILE);
             final File jar = getJAR(plugin);
             if (jar != null)
-                configuration.setProperty(plugin.getDescription().getName().toLowerCase().replace(" ", ""),
+                configuration.set(plugin.getDescription().getName().toLowerCase().replace(" ", ""),
                         jar.getName());
-            configuration.save();
+            try {
+                configuration.save(JARS_FILE);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
             return true;
         }
         return false;
