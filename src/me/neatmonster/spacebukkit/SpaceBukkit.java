@@ -18,6 +18,7 @@ import java.io.IOException;
 import java.util.Timer;
 import java.util.UUID;
 
+import mcstats.Metrics;
 import me.neatmonster.spacebukkit.actions.PlayerActions;
 import me.neatmonster.spacebukkit.actions.ServerActions;
 import me.neatmonster.spacebukkit.actions.SystemActions;
@@ -137,6 +138,8 @@ public class SpaceBukkit extends JavaPlugin {
             eventHandler = new EventHandler();
             new Thread(eventHandler, "SpaceModule EventHandler").start();
         }
+        
+        setupMetrics();
 
         new SBListener(this);
         pluginsManager = new PluginsManager();
@@ -158,6 +161,19 @@ public class SpaceBukkit extends JavaPlugin {
                 + this.getDescription().getVersion()
                 + " is now enabled!         |");
         getLogger().info("----------------------------------------------------------");
+    }
+    
+    /**
+     * Sets up Metrics
+     */
+    private void setupMetrics() {
+        try {
+            Metrics metrics = new Metrics(this);
+            
+            metrics.start();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     /**
