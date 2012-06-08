@@ -71,7 +71,7 @@ public class SBListener implements Listener {
     @EventHandler(ignoreCancelled = true)
     public void onServerCommand(final ServerCommandEvent event) {
         String cmd = event.getCommand();
-        if (cmd.startsWith("say") && !cmd.equalsIgnoreCase("say")) {
+        if (!cmd.equalsIgnoreCase("say")) {
             final String message = cmd.substring(4);
             PlayerLogger.addPlayerChat("Server", message);
         }

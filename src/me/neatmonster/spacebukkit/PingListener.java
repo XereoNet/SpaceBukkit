@@ -21,28 +21,36 @@ import java.net.InetAddress;
 import java.net.Socket;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-import me.neatmonster.spacertk.SpaceRTK;
-
+/**
+ * Pings the RTK and Module to ensure they are functioning correctly
+ */
 public class PingListener extends Thread {
-    public static final long PING_EVERY = 1 * 1000;
-    public static final long REQUEST_BUFFER = 5 * 100;
+    public static final long PING_EVERY = 30000; // Thirty seconds
+    public static final long REQUEST_BUFFER = 10000; // Ten seconds
 
-    private final Socket pluginSocket;
     private final Socket moduleSocket;
 
     private long lastPluginPing;
     private long lastModuleResponse;
+    
+    private boolean lostModule;
 
     private AtomicBoolean running = new AtomicBoolean(false);
 
+    /**
+     * Creates a new PingListener
+     * 
+     * @throws IOException
+     *             If an exception is thrown
+     */
     public PingListener() throws IOException {
-        this.pluginSocket = new Socket(InetAddress.getLocalHost(),
-                SpaceRTK.getInstance().port);
-        this.moduleSocket = new Socket(InetAddress.getLocalHost(), 2010); // TODO
-                                                                          // config
-                                                                          // value?
+        this.moduleSocket = new Socket(InetAddress.getLocalHost(), 2014);
+        this.lostModule = false;
     }
 
+    /**
+     * Starts the Ping Listener
+     */
     public void startup() {
         this.running.set(true);
         this.start();
@@ -50,43 +58,44 @@ public class PingListener extends Thread {
 
     @Override
     public void run() {
-        ObjectOutputStream moduleStream = null;
-        ObjectInputStream rtkStream = null;
-        try {
-            moduleStream = new ObjectOutputStream(
-                    moduleSocket.getOutputStream());
-            rtkStream = new ObjectInputStream(pluginSocket.getInputStream());
-        } catch (IOException e) {
-            handleException(e);
-        }
         while (running.get()) {
             long now = System.currentTimeMillis();
-            String input = null;
-            try {
-                input = me.neatmonster.spacemodule.utilities.Utilities
-                        .readString(rtkStream);
-            } catch (IOException e) {
-                handleException(e);
-            }
-            if (input != null) {
-                parse(input);
+            boolean shouldRead = now - lastModuleResponse > PING_EVERY;
+            if (shouldRead) {
+                try {
+                    ObjectInputStream stream = new ObjectInputStream(moduleSocket.getInputStream());
+                    String input = me.neatmonster.spacemodule.utilities.Utilities.readString(stream);
+                    if (input != null) {
+                        parse(input);
+                    }
+                } catch (IOException e) {
+                    // Do Nothing, as this means that there was no input sent
+                }
             }
             if (now - lastPluginPing > PING_EVERY) {
                 try {
+                    ObjectOutputStream stream = new ObjectOutputStream(moduleSocket.getOutputStream());
                     me.neatmonster.spacemodule.utilities.Utilities.writeString(
-                            moduleStream, "PLUGIN-PING");
-                    moduleStream.flush();
+                            stream, "PLUGIN-PING");
+                    stream.flush();
                     lastPluginPing = now;
                 } catch (IOException e) {
-                    handleException(e);
+                    handleException(e, "Ping could not be sent to the Module!");
                 }
             }
-            if (now - lastModuleResponse > PING_EVERY + REQUEST_BUFFER) {
+            if (!lostModule && now - lastModuleResponse > PING_EVERY + REQUEST_BUFFER) {
                 onModuleNotFound();
+                lostModule = true;
             }
         }
     }
 
+    /**
+     * Parses input from the Module
+     * 
+     * @param input
+     *            Input from the Module
+     */
     public void parse(String input) {
         long now = System.currentTimeMillis();
         if (input.equalsIgnoreCase("PING")) {
@@ -97,24 +106,39 @@ public class PingListener extends Thread {
         }
     }
 
+    /**
+     * Shuts down the Ping Listener
+     */
     public void shutdown() {
         try {
             this.running.set(false);
-            pluginSocket.close();
-            moduleSocket.close();
+            if (!(moduleSocket.isClosed())) {
+                moduleSocket.close();
+            }
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
-    public void handleException(Exception e) {
+    /**
+     * Called when an exception is thrown
+     * 
+     * @param e
+     *            Exception thrown
+     */
+    public void handleException(Exception e, String reason) {
         shutdown();
-        System.err.println("[SpaceBukkit] Ping Listener Error! Error message:");
+        System.err.println("[SpaceBukkit] Ping Listener Error!");
+        System.err.println(reason);
+        System.err.println("Error message:");
         e.printStackTrace();
     }
 
+    /**
+     * Called when the Module can't be found
+     */
     public void onModuleNotFound() {
-        System.err.println("[SpaceBukkit] Unable to ping SpaceModule!");
+        System.err.println("[SpaceBukkit] Unable to ping the Module!");
         System.err
                 .println("[SpaceBukkit] Please insure the correct ports are open");
         System.err
