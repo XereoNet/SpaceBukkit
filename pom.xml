@@ -57,15 +57,17 @@
             <name>Bukkit</name>
             <url>http://repo.bukkit.org/content/groups/public/</url>
         </repository>
-        <!-- Vault's repository -->
-        <repository>
-            <id>milkbowl-repo</id>
-            <url>http://ci.milkbowl.net/plugin/repository/everything/</url>
-        </repository>
     </repositories>
 
     <!-- Dependencies -->
     <dependencies>
+        <dependency>
+            <groupId>com.drdanick.McRKit</groupId>
+            <artifactId>McRKitLauncher</artifactId>
+            <version>R10A12</version>
+            <scope>compile</scope>
+        </dependency>
+
         <dependency>
             <groupId>me.neatmonster</groupId>
             <artifactId>spacemodule</artifactId>
@@ -104,7 +106,7 @@
         <dependency>
             <groupId>net.milkbowl.vault</groupId>
             <artifactId>Vault</artifactId>
-            <version>1.2.9-SNAPSHOT</version>
+            <version>1.2.9</version>
             <scope>compile</scope>
         </dependency>
     </dependencies>
