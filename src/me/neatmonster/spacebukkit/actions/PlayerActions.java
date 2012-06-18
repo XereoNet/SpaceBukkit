@@ -180,17 +180,17 @@ public class PlayerActions {
         }
         PlayerInventory inv = player.getInventory();
         for (int i = 0; i < player.getInventory().getSize(); i++) {
-            playerInventory.put(i, inv.getItem(i) == null ? new HashMap<String, Object>() : player
-                    .getInventory().getItem(i).serialize());
+            playerInventory.put(i, inv.getItem(i) == null ? new HashMap<String, Object>() : Utilities.serializeItem(player
+                    .getInventory().getItem(i)));
         }
-        playerInventory.put(100, inv.getBoots() == null ? new HashMap<String, Object>() : player
-                .getInventory().getBoots().serialize());
-        playerInventory.put(101, inv.getLeggings() == null ? new HashMap<String, Object>() : player
-                .getInventory().getLeggings().serialize());
-        playerInventory.put(102, inv.getChestplate() == null ? new HashMap<String, Object>() : player
-                .getInventory().getChestplate().serialize());
-        playerInventory.put(103, inv.getHelmet() == null ? new HashMap<String, Object>() : player
-                .getInventory().getHelmet().serialize());
+        playerInventory.put(100, inv.getBoots() == null ? new HashMap<String, Object>() : Utilities.serializeItem(player
+                .getInventory().getBoots()));
+        playerInventory.put(101, inv.getLeggings() == null ? new HashMap<String, Object>() : Utilities.serializeItem(player
+                .getInventory().getLeggings()));
+        playerInventory.put(102, inv.getChestplate() == null ? new HashMap<String, Object>() : Utilities.serializeItem(player
+                .getInventory().getChestplate()));
+        playerInventory.put(103, inv.getHelmet() == null ? new HashMap<String, Object>() : Utilities.serializeItem(player
+                .getInventory().getHelmet()));
         return playerInventory;
     }
 
@@ -210,7 +210,7 @@ public class PlayerActions {
         final ItemStack itemStack = player.getInventory().getItem(slot);
         if (itemStack == null)
             return new HashMap<String, Object>();
-        return itemStack.serialize();
+        return Utilities.serializeItem(itemStack);
     }
 
     /**
