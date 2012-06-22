@@ -433,57 +433,32 @@ public class ServerActions {
         final LinkedHashMap<String, Object> pluginInformations = new LinkedHashMap<String, Object>();
         final Plugin plugin = Bukkit.getPluginManager().getPlugin(pluginName);
         if (plugin != null) {
-            try {
-                pluginInformations.put("Name", plugin.getDescription().getName());
-            } catch (final Exception e) {}
-            try {
-                pluginInformations.put("IsEnabled", plugin.isEnabled());
-            } catch (final Exception e) {}
+            pluginInformations.put("Name", plugin.getDescription().getName());
+            pluginInformations.put("IsEnabled", plugin.isEnabled());
             pluginInformations.put("Commands", plugin.getDescription().getCommands());
-            try {
-                pluginInformations.put("Depend", plugin.getDescription().getDepend());
-            } catch (final Exception e) {}
-            try {
-                pluginInformations.put("DataFolder", plugin.getDataFolder().getPath());
-            } catch (final Exception e) {}
-            try {
-                pluginInformations.put("SoftDepend", plugin.getDescription().getSoftDepend());
-            } catch (final Exception e) {}
-            try {
-                pluginInformations.put("Authors", plugin.getDescription().getAuthors());
-            } catch (final Exception e) {}
-            try {
-                pluginInformations.put("Description", plugin.getDescription().getDescription());
-            } catch (final Exception e) {}
-            try {
-                pluginInformations.put("FullName", plugin.getDescription().getFullName());
-            } catch (final Exception e) {}
-            try {
-                pluginInformations.put("Main", plugin.getDescription().getMain());
-            } catch (final Exception e) {}
-            try {
-                if (plugin.getDescription().getPermissions() != null) {
-                    final LinkedList<LinkedHashMap<String, String>> permissions = new LinkedList<LinkedHashMap<String, String>>();
-                    for (final org.bukkit.permissions.Permission permission : plugin.getDescription().getPermissions()) {
-                        final LinkedHashMap<String, String> permissionInformations = new LinkedHashMap<String, String>();
-                        permissionInformations.put("Name", permission.getName());
-                        permissionInformations.put("Description", permission.getDescription());
-                        permissionInformations.put("Default", permission.getDefault().name());
-                        permissions.add(permissionInformations);
-                    }
-                    pluginInformations.put("Permissions", permissions);
-                } else
+            pluginInformations.put("Depend", plugin.getDescription().getDepend());
+            pluginInformations.put("DataFolder", plugin.getDataFolder().getPath());
+            pluginInformations.put("SoftDepend", plugin.getDescription().getSoftDepend());
+            pluginInformations.put("Authors", plugin.getDescription().getAuthors());
+            pluginInformations.put("Description", plugin.getDescription().getDescription());
+            pluginInformations.put("FullName", plugin.getDescription().getFullName());
+            pluginInformations.put("Main", plugin.getDescription().getMain());
+            if (plugin.getDescription().getPermissions() != null) {
+                final LinkedList<LinkedHashMap<String, String>> permissions = new LinkedList<LinkedHashMap<String, String>>();
+                for (final org.bukkit.permissions.Permission permission : plugin.getDescription().getPermissions()) {
+                    final LinkedHashMap<String, String> permissionInformations = new LinkedHashMap<String, String>();
+                    permissionInformations.put("Name", permission.getName());
+                    permissionInformations.put("Description", permission.getDescription());
+                    permissionInformations.put("Default", permission.getDefault().name());
+                    permissions.add(permissionInformations);
+                }
+                pluginInformations.put("Permissions", permissions);
+                } else {
                     pluginInformations.put("Permissions", "[]");
-            } catch (final Exception e) {}
-            try {
-                pluginInformations.put("Version", plugin.getDescription().getVersion());
-            } catch (final Exception e) {}
-            try {
-                pluginInformations.put("Website", plugin.getDescription().getWebsite());
-            } catch (final Exception e) {}
-            try {
-                pluginInformations.put("Bukget", SpaceBukkit.getInstance().pluginsManager.contains(pluginName));
-            } catch (final Exception e) {}
+                }
+            pluginInformations.put("Version", plugin.getDescription().getVersion());
+            pluginInformations.put("Website", plugin.getDescription().getWebsite());
+            pluginInformations.put("Bukget", SpaceBukkit.getInstance().pluginsManager.contains(pluginName));
             return pluginInformations;
         }
         return new LinkedHashMap<String, Object>();

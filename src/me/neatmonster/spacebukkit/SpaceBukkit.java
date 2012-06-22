@@ -35,7 +35,6 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import com.drdanick.rtoolkit.EventDispatcher;
 import com.drdanick.rtoolkit.event.ToolkitEventHandler;
-
 /**
  * Main class of the Plugin
  */
@@ -61,7 +60,6 @@ public class SpaceBukkit extends JavaPlugin {
     public PerformanceMonitor   performanceMonitor;
 
     private YamlConfiguration   configuration;
-    public String               logTag = "[SpaceBukkit] ";
 
     private final Timer         timer  = new Timer();
 
@@ -69,9 +67,6 @@ public class SpaceBukkit extends JavaPlugin {
     private ToolkitEventHandler eventHandler;
     private PingListener pingListener;
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public void onDisable() {
         performanceMonitor.infanticide();
@@ -81,21 +76,15 @@ public class SpaceBukkit extends JavaPlugin {
             if (panelListener != null)
                 panelListener.stopServer();
         } catch (final Exception e) {
-            getLogger().severe(logTag + e.getMessage());
+            getLogger().severe(e.getMessage());
         }
         edt.setRunning(false);
         synchronized (edt) {
             edt.notifyAll();
         }
         eventHandler.setEnabled(false);
-        getLogger().info("----------------------------------------------------------");
-        getLogger().info("|             SpaceBukkit is now disabled!               |");
-        getLogger().info("----------------------------------------------------------");
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public void onEnable() {
         spacebukkit = this;
@@ -113,6 +102,13 @@ public class SpaceBukkit extends JavaPlugin {
         maxQuits = configuration.getInt("SpaceBukkit.maxQuits", 199);
         try {
             configuration.save(SpaceModule.CONFIGURATION);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        
+        try {
+            pingListener = new PingListener();
+            pingListener.startup();
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -149,18 +145,7 @@ public class SpaceBukkit extends JavaPlugin {
         actionsManager.register(SystemActions.class);
         panelListener = new PanelListener();
         performanceMonitor = new PerformanceMonitor();
-        try {
-            pingListener = new PingListener();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        pingListener.startup();
         timer.scheduleAtFixedRate(performanceMonitor, 0L, 1000L);
-        getLogger().info("----------------------------------------------------------");
-        getLogger().info("|        SpaceBukkit version "
-                + this.getDescription().getVersion()
-                + " is now enabled!         |");
-        getLogger().info("----------------------------------------------------------");
     }
     
     /**

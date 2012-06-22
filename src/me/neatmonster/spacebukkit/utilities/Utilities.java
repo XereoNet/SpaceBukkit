@@ -22,10 +22,12 @@ import java.net.URL;
 import java.net.URLConnection;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.Map;
 
 import me.neatmonster.spacebukkit.SpaceBukkit;
 
 import org.bukkit.ChatColor;
+import org.bukkit.inventory.ItemStack;
 
 /**
  * Various Utility methods
@@ -206,5 +208,16 @@ public class Utilities {
             index++;
         }
         return string;
+    }
+    
+    /**
+     * Serializes an item with the extra data "id" which contains the item id
+     * @param stack Stack to serialize
+     * @return Serialized item
+     */
+    public static Map<String, Object> serializeItem(ItemStack stack) {
+        Map<String, Object> result = stack.serialize();
+        result.put("id", stack.getTypeId());
+        return result;
     }
 }

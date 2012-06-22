@@ -48,7 +48,7 @@ public class PluginsManager {
             return null;
         }
         Class<?> currentClass = plugin.getClass();
-        while (JavaPlugin.class.isAssignableFrom(currentClass)) {
+        while (!(currentClass.equals(JavaPlugin.class))) {
             currentClass = currentClass.getSuperclass();
         }
         try {

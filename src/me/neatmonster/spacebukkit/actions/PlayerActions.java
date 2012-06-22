@@ -15,7 +15,6 @@
 package me.neatmonster.spacebukkit.actions;
 
 import java.io.UnsupportedEncodingException;
-import java.lang.reflect.Method;
 import java.net.URLDecoder;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -26,14 +25,12 @@ import java.util.Map;
 import me.neatmonster.spacebukkit.players.PlayerLogger;
 import me.neatmonster.spacebukkit.utilities.Utilities;
 import me.neatmonster.spacemodule.api.Action;
-import net.minecraft.server.ServerConfigurationManager;
 
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.World;
-import org.bukkit.craftbukkit.CraftServer;
 import org.bukkit.entity.Egg;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Snowball;
@@ -183,17 +180,17 @@ public class PlayerActions {
         }
         PlayerInventory inv = player.getInventory();
         for (int i = 0; i < player.getInventory().getSize(); i++) {
-            playerInventory.put(i, inv.getItem(i) == null ? new HashMap<String, Object>() : player
-                    .getInventory().getItem(i).serialize());
+            playerInventory.put(i, inv.getItem(i) == null ? new HashMap<String, Object>() : Utilities.serializeItem(player
+                    .getInventory().getItem(i)));
         }
-        playerInventory.put(100, inv.getBoots() == null ? new HashMap<String, Object>() : player
-                .getInventory().getBoots().serialize());
-        playerInventory.put(101, inv.getLeggings() == null ? new HashMap<String, Object>() : player
-                .getInventory().getLeggings().serialize());
-        playerInventory.put(102, inv.getChestplate() == null ? new HashMap<String, Object>() : player
-                .getInventory().getChestplate().serialize());
-        playerInventory.put(103, inv.getHelmet() == null ? new HashMap<String, Object>() : player
-                .getInventory().getHelmet().serialize());
+        playerInventory.put(100, inv.getBoots() == null ? new HashMap<String, Object>() : Utilities.serializeItem(player
+                .getInventory().getBoots()));
+        playerInventory.put(101, inv.getLeggings() == null ? new HashMap<String, Object>() : Utilities.serializeItem(player
+                .getInventory().getLeggings()));
+        playerInventory.put(102, inv.getChestplate() == null ? new HashMap<String, Object>() : Utilities.serializeItem(player
+                .getInventory().getChestplate()));
+        playerInventory.put(103, inv.getHelmet() == null ? new HashMap<String, Object>() : Utilities.serializeItem(player
+                .getInventory().getHelmet()));
         return playerInventory;
     }
 
@@ -213,7 +210,7 @@ public class PlayerActions {
         final ItemStack itemStack = player.getInventory().getItem(slot);
         if (itemStack == null)
             return new HashMap<String, Object>();
-        return itemStack.serialize();
+        return Utilities.serializeItem(itemStack);
     }
 
     /**
