@@ -18,7 +18,3 @@
 *.ipr
 *.iws
 .idea/
-
-#Build files
-/build
-/test
