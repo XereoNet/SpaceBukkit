@@ -217,6 +217,7 @@ public class Utilities {
      */
     public static Map<String, Object> serializeItem(ItemStack stack) {
         Map<String, Object> result = stack.serialize();
+        result.put("type", stack.getType());
         result.put("id", stack.getTypeId());
         return result;
     }
