@@ -176,21 +176,16 @@ public class PlayerActions {
         final LinkedHashMap<Integer, Map<String, Object>> playerInventory = new LinkedHashMap<Integer, Map<String, Object>>();
         final Player player = Bukkit.getPlayer(playerName);
         if (player == null) {
-            return new LinkedHashMap<Integer, Map<String, Object>>();
+            return playerInventory;
         }
         PlayerInventory inv = player.getInventory();
         for (int i = 0; i < player.getInventory().getSize(); i++) {
-            playerInventory.put(i, inv.getItem(i) == null ? new HashMap<String, Object>() : Utilities.serializeItem(player
-                    .getInventory().getItem(i)));
+            playerInventory.put(i, inv.getItem(i) == null ? new HashMap<String, Object>() : Utilities.serializeItem(inv.getItem(i)));
         }
-        playerInventory.put(100, inv.getBoots() == null ? new HashMap<String, Object>() : Utilities.serializeItem(player
-                .getInventory().getBoots()));
-        playerInventory.put(101, inv.getLeggings() == null ? new HashMap<String, Object>() : Utilities.serializeItem(player
-                .getInventory().getLeggings()));
-        playerInventory.put(102, inv.getChestplate() == null ? new HashMap<String, Object>() : Utilities.serializeItem(player
-                .getInventory().getChestplate()));
-        playerInventory.put(103, inv.getHelmet() == null ? new HashMap<String, Object>() : Utilities.serializeItem(player
-                .getInventory().getHelmet()));
+        playerInventory.put(100, inv.getBoots() == null ? new HashMap<String, Object>() : Utilities.serializeItem(inv.getBoots()));
+        playerInventory.put(101, inv.getLeggings() == null ? new HashMap<String, Object>() : Utilities.serializeItem(inv.getLeggings()));
+        playerInventory.put(102, inv.getChestplate() == null ? new HashMap<String, Object>() : Utilities.serializeItem(inv.getChestplate()));
+        playerInventory.put(103, inv.getHelmet() == null ? new HashMap<String, Object>() : Utilities.serializeItem(inv.getHelmet()));
         return playerInventory;
     }
 
