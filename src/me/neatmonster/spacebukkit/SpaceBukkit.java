@@ -88,6 +88,14 @@ public class SpaceBukkit extends JavaPlugin {
     @Override
     public void onEnable() {
         spacebukkit = this;
+        
+        try {
+            pingListener = new PingListener();
+            pingListener.startup();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        
         configuration = YamlConfiguration.loadConfiguration(SpaceModule.CONFIGURATION);
         configuration.addDefault("General.salt", "<default>");
         configuration.addDefault("General.worldContainer", Bukkit.getWorldContainer().getPath());
@@ -110,13 +118,6 @@ public class SpaceBukkit extends JavaPlugin {
         maxQuits = configuration.getInt("SpaceBukkit.maxQuits", 199);
         try {
             configuration.save(SpaceModule.CONFIGURATION);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        
-        try {
-            pingListener = new PingListener();
-            pingListener.startup();
         } catch (IOException e) {
             e.printStackTrace();
         }
