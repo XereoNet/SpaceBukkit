@@ -88,27 +88,36 @@ public class SpaceBukkit extends JavaPlugin {
     @Override
     public void onEnable() {
         spacebukkit = this;
+        
+        try {
+            pingListener = new PingListener();
+            pingListener.startup();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        
         configuration = YamlConfiguration.loadConfiguration(SpaceModule.CONFIGURATION);
-        salt = configuration.getString("General.Salt", "<default>");
+        configuration.addDefault("General.salt", "<default>");
+        configuration.addDefault("General.worldContainer", Bukkit.getWorldContainer().getPath());
+        configuration.addDefault("SpaceBukkit.port", 2011);
+        configuration.addDefault("SpaceRTK.port", 2012);
+        configuration.addDefault("SpaceBukkit.maxJoins", 199);
+        configuration.addDefault("SpaceBukkit.maxMessages", 199);
+        configuration.addDefault("SpaceBukkit.maxQuits", 199);
+        configuration.options().copyDefaults(true);
+        salt = configuration.getString("General.salt", "<default>");
         if (salt.equals("<default>")) {
             salt = UUID.randomUUID().toString().replaceAll("-", "").toUpperCase();
-            configuration.set("General.Salt", salt);
+            configuration.set("General.salt", salt);
         }
-        configuration.set("General.WorldContainer", Bukkit.getWorldContainer().getPath());
-        port = configuration.getInt("SpaceBukkit.Port", 2011);
-        rPort = configuration.getInt("SpaceRTK.Port", 2012);
+        configuration.set("General.worldContainer", Bukkit.getWorldContainer().getPath());
+        port = configuration.getInt("SpaceBukkit.port", 2011);
+        rPort = configuration.getInt("SpaceRTK.port", 2012);
         maxJoins = configuration.getInt("SpaceBukkit.maxJoins", 199);
         maxMessages = configuration.getInt("SpaceBukkit.maxMessages", 199);
         maxQuits = configuration.getInt("SpaceBukkit.maxQuits", 199);
         try {
             configuration.save(SpaceModule.CONFIGURATION);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        
-        try {
-            pingListener = new PingListener();
-            pingListener.startup();
         } catch (IOException e) {
             e.printStackTrace();
         }
