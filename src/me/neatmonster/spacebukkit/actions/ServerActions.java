@@ -35,6 +35,7 @@ import me.neatmonster.spacebukkit.utilities.ANSI;
 import me.neatmonster.spacebukkit.utilities.PropertiesFile;
 import me.neatmonster.spacebukkit.utilities.Utilities;
 import me.neatmonster.spacemodule.api.Action;
+import me.neatmonster.spacemodule.api.ActionHandler;
 import me.neatmonster.spacemodule.api.UnhandledActionException;
 import net.milkbowl.vault.permission.Permission;
 import net.milkbowl.vault.permission.plugins.Permission_SuperPerms;
@@ -48,7 +49,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.ServicesManager;
 
-public class ServerActions {
+public class ServerActions implements ActionHandler {
 
     /**
      * Bans an IP

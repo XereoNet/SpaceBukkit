@@ -26,6 +26,7 @@ import me.neatmonster.spacebukkit.players.PlayerLogger;
 import me.neatmonster.spacebukkit.utilities.Utilities;
 import me.neatmonster.spacemodule.api.Action;
 
+import me.neatmonster.spacemodule.api.ActionHandler;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
@@ -41,7 +42,7 @@ import org.bukkit.inventory.PlayerInventory;
 /**
  * Actions handler for any Player-related actions
  */
-public class PlayerActions {
+public class PlayerActions implements ActionHandler {
 
     /**
      * Throws an egg

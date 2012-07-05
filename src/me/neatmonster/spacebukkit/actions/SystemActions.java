@@ -23,11 +23,12 @@ import java.util.List;
 
 import me.neatmonster.spacebukkit.SpaceBukkit;
 import me.neatmonster.spacemodule.api.Action;
+import me.neatmonster.spacemodule.api.ActionHandler;
 
 /**
  * Actions handler for any System-related events
  */
-public class SystemActions {
+public class SystemActions implements ActionHandler {
 
     /**
      * Gets the Operating System of the server machine
