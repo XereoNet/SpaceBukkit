@@ -180,10 +180,7 @@
                         <filter>
                             <artifact>me.neatmonster:spacertk</artifact>
                             <includes>
-                                <include>de/schlichtherle/truezip/**</include>
-                                <include>org/apache/commons/compress/**</include>
-                                <include>org/tukaani/xz/**</include>
-                                <include>org/bouncycastle/**</include>
+                                <include>**</include>
                             </includes>
                         </filter>
                     </filters>
