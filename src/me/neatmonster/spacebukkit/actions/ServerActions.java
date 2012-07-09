@@ -808,7 +808,7 @@ public class ServerActions implements ActionHandler {
     /**
      * Get a list of users given their parent group and world name.
      * @param groupName The group the users belong to.
-     * @param world the name of the world the group belongs to.
+     * @param worldName the name of the world the group belongs to.
      * @return A list of usernames in a given group.
      */
     @Action(
@@ -931,7 +931,7 @@ public class ServerActions implements ActionHandler {
 
     /**
      * Check if a user has a given permission.
-     * @param username The user to check for a permission.
+     * @param userName The user to check for a permission.
      * @param permission The permission to check.
      * @param world the name of the world the permission is under.
      * @return true if the user has the permission, false otherwise.
@@ -949,7 +949,7 @@ public class ServerActions implements ActionHandler {
 
     /**
      * Get a list of worlds a user has a given permission.
-     * @param username The user to check for a permission.
+     * @param userName The user to check for a permission.
      * @param permission The permission to check.
      * @return A list of worlds the user has a permission under.
      */
