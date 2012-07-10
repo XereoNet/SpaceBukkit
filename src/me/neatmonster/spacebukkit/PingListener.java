@@ -15,37 +15,38 @@
 package me.neatmonster.spacebukkit;
 
 import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
+import java.net.DatagramPacket;
+import java.net.DatagramSocket;
 import java.net.InetAddress;
-import java.net.Socket;
+import java.net.SocketException;
 import java.util.concurrent.atomic.AtomicBoolean;
 
+import me.neatmonster.spacemodule.utilities.Utilities;
+
 /**
- * Pings the RTK and Module to ensure they are functioning correctly
+ * Pings the Module to ensure it is functioning correctly
  */
 public class PingListener extends Thread {
     public static final long PING_EVERY = 30000; // Thirty seconds
     public static final long REQUEST_BUFFER = 10000; // Ten seconds
 
-    private final Socket moduleSocket;
-
     private long lastPluginPing;
     private long lastModuleResponse;
-    
+
     private boolean lostModule;
+
+    private PacketSendClass sender;
+    private PacketReceiveClass receiver;
 
     private AtomicBoolean running = new AtomicBoolean(false);
 
     /**
      * Creates a new PingListener
-     * 
-     * @throws IOException
-     *             If an exception is thrown
      */
-    public PingListener() throws IOException {
-        this.moduleSocket = new Socket(InetAddress.getLocalHost(), 2014);
+    public PingListener() {
         this.lostModule = false;
+        this.lastPluginPing = 0;
+        this.lastModuleResponse = 0;
     }
 
     /**
@@ -58,51 +59,88 @@ public class PingListener extends Thread {
 
     @Override
     public void run() {
+        try {
+            sender = new PacketSendClass();
+            receiver = new PacketReceiveClass();
+        } catch (SocketException e) {
+            handleException(e,
+                    "Unable to start the PingListener, socket error!");
+        }
+        sender.start();
+        receiver.start();
         while (running.get()) {
             long now = System.currentTimeMillis();
-            boolean shouldRead = now - lastModuleResponse > PING_EVERY;
-            if (shouldRead) {
-                try {
-                    ObjectInputStream stream = new ObjectInputStream(moduleSocket.getInputStream());
-                    String input = me.neatmonster.spacemodule.utilities.Utilities.readString(stream);
-                    if (input != null) {
-                        parse(input);
-                    }
-                } catch (IOException e) {
-                    // Do Nothing, as this means that there was no input sent
-                }
-            }
-            if (now - lastPluginPing > PING_EVERY) {
-                try {
-                    ObjectOutputStream stream = new ObjectOutputStream(moduleSocket.getOutputStream());
-                    me.neatmonster.spacemodule.utilities.Utilities.writeString(
-                            stream, "PLUGIN-PING");
-                    stream.flush();
-                    lastPluginPing = now;
-                } catch (IOException e) {
-                    handleException(e, "Ping could not be sent to the Module!");
-                }
-            }
-            if (!lostModule && now - lastModuleResponse > PING_EVERY + REQUEST_BUFFER) {
+            if (now - lastModuleResponse > PING_EVERY + REQUEST_BUFFER) {
                 onModuleNotFound();
-                lostModule = true;
             }
         }
     }
 
     /**
-     * Parses input from the Module
-     * 
-     * @param input
-     *            Input from the Module
+     * Sends packets to the module
      */
-    public void parse(String input) {
-        long now = System.currentTimeMillis();
-        if (input.equalsIgnoreCase("PING")) {
-            lastModuleResponse = now;
-        } else {
-            System.err.println("[SpaceBukkit] Unknown input! '" + input
-                    + "'.  Please report this to the developers");
+    private class PacketSendClass extends Thread {
+        private final DatagramSocket socket;
+
+        /**
+         * Creates a new PacketSendClass
+         * 
+         * @throws SocketException
+         *             If the socket could not be created
+         */
+        public PacketSendClass() throws SocketException {
+            socket = new DatagramSocket(2014);
+        }
+
+        @Override
+        public void run() {
+            long now = System.currentTimeMillis();
+            if (now - lastPluginPing > PING_EVERY) {
+                try {
+                    byte[] buffer = Utilities.longToBytes(now);
+                    DatagramPacket packet = new DatagramPacket(buffer,
+                            buffer.length, InetAddress.getLocalHost(), 2014);
+                    socket.send(packet);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
+
+    /**
+     * Receives packets from the module
+     */
+    private class PacketReceiveClass extends Thread {
+        private final DatagramSocket socket;
+
+        /**
+         * Creates a new PacketReceiveClass
+         * 
+         * @throws SocketException
+         *             If the socket could not be created
+         */
+        public PacketReceiveClass() throws SocketException {
+            socket = new DatagramSocket(2014);
+        }
+
+        @Override
+        public void run() {
+            long now = System.currentTimeMillis();
+            if (now - lastPluginPing > PING_EVERY) {
+                try {
+                    byte[] buffer = new byte[65536];
+                    DatagramPacket packet = new DatagramPacket(buffer,
+                            buffer.length, InetAddress.getLocalHost(), 2014);
+                    socket.receive(packet);
+                    long sent = Utilities.bytesToLong(packet.getData());
+                    if (lastModuleResponse < sent) {
+                        lastModuleResponse = sent;
+                    }
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
         }
     }
 
@@ -110,13 +148,12 @@ public class PingListener extends Thread {
      * Shuts down the Ping Listener
      */
     public void shutdown() {
+        this.running.set(false);
         try {
-            this.running.set(false);
-            if (!(moduleSocket.isClosed())) {
-                moduleSocket.close();
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
+            sender.join(1000);
+            receiver.join(1000);
+        } catch (InterruptedException e) {
+            handleException(e, "Could not shutdown the PingListener!");
         }
     }
 
@@ -138,11 +175,15 @@ public class PingListener extends Thread {
      * Called when the Module can't be found
      */
     public void onModuleNotFound() {
+        if (lostModule) {
+            return;
+        }
         System.err.println("[SpaceBukkit] Unable to ping the Module!");
         System.err
                 .println("[SpaceBukkit] Please insure the correct ports are open");
         System.err
                 .println("[SpaceBukkit] Please contact the forums (http://forums.xereo.net/) or IRC (#SpaceBukkit on irc.esper.net)");
+        lostModule = true;
     }
 
 }
