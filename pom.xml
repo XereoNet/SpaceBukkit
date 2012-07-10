@@ -6,7 +6,7 @@
     <!-- Project information -->
     <groupId>me.neatmonster</groupId>
     <artifactId>spacebukkit</artifactId>
-    <version>0.1-SNAPSHOT</version>
+    <version>1.2-SNAPSHOT</version>
     <name>SpaceBukkit</name>
     <url>http://spacebukkit.xereo.net/</url>
     <description>A powerful yet simple web panel for administering your Minecraft servers with ease.</description>
@@ -71,14 +71,14 @@
         <dependency>
             <groupId>me.neatmonster</groupId>
             <artifactId>spacemodule</artifactId>
-            <version>0.1-SNAPSHOT</version>
+            <version>1.2-SNAPSHOT</version>
             <scope>compile</scope>
         </dependency>
 
         <dependency>
             <groupId>me.neatmonster</groupId>
             <artifactId>spacertk</artifactId>
-            <version>0.1-SNAPSHOT</version>
+            <version>1.2-SNAPSHOT</version>
             <scope>compile</scope>
         </dependency>
 
