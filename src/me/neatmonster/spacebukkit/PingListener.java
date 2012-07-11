@@ -21,22 +21,15 @@ import java.net.InetAddress;
 import java.net.SocketException;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-import me.neatmonster.spacemodule.utilities.Utilities;
-
 /**
  * Pings the Module to ensure it is functioning correctly
  */
 public class PingListener extends Thread {
-    public static final long PING_EVERY = 30000; // Thirty seconds
-    public static final long REQUEST_BUFFER = 10000; // Ten seconds
-
-    private long lastPluginPing;
-    private long lastModuleResponse;
+    public static final int REQUEST_BUFFER = 10000; // Ten seconds
 
     private boolean lostModule;
 
-    private PacketSendClass sender;
-    private PacketReceiveClass receiver;
+    private DatagramSocket socket;
 
     private AtomicBoolean running = new AtomicBoolean(false);
 
@@ -44,9 +37,13 @@ public class PingListener extends Thread {
      * Creates a new PingListener
      */
     public PingListener() {
+        super("Ping Listener Main Thread");
         this.lostModule = false;
-        this.lastPluginPing = 0;
-        this.lastModuleResponse = 0;
+        try {
+            this.socket = new DatagramSocket();
+        } catch (IOException e) {
+            handleException(e, "Unable to start the PingListener");
+        }
     }
 
     /**
@@ -60,86 +57,18 @@ public class PingListener extends Thread {
     @Override
     public void run() {
         try {
-            sender = new PacketSendClass();
-            receiver = new PacketReceiveClass();
+            socket.setSoTimeout(REQUEST_BUFFER);
         } catch (SocketException e) {
-            handleException(e,
-                    "Unable to start the PingListener, socket error!");
+            handleException(e, "Error setting the So Timeout!");
         }
-        sender.start();
-        receiver.start();
         while (running.get()) {
-            long now = System.currentTimeMillis();
-            if (now - lastModuleResponse > PING_EVERY + REQUEST_BUFFER) {
-                onModuleNotFound();
-            }
-        }
-    }
-
-    /**
-     * Sends packets to the module
-     */
-    private class PacketSendClass extends Thread {
-        private final DatagramSocket socket;
-
-        /**
-         * Creates a new PacketSendClass
-         * 
-         * @throws SocketException
-         *             If the socket could not be created
-         */
-        public PacketSendClass() throws SocketException {
-            socket = new DatagramSocket(2014);
-        }
-
-        @Override
-        public void run() {
-            long now = System.currentTimeMillis();
-            if (now - lastPluginPing > PING_EVERY) {
-                try {
-                    byte[] buffer = Utilities.longToBytes(now);
-                    DatagramPacket packet = new DatagramPacket(buffer,
-                            buffer.length, InetAddress.getLocalHost(), 2014);
-                    socket.send(packet);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-        }
-    }
-
-    /**
-     * Receives packets from the module
-     */
-    private class PacketReceiveClass extends Thread {
-        private final DatagramSocket socket;
-
-        /**
-         * Creates a new PacketReceiveClass
-         * 
-         * @throws SocketException
-         *             If the socket could not be created
-         */
-        public PacketReceiveClass() throws SocketException {
-            socket = new DatagramSocket(2014);
-        }
-
-        @Override
-        public void run() {
-            long now = System.currentTimeMillis();
-            if (now - lastPluginPing > PING_EVERY) {
-                try {
-                    byte[] buffer = new byte[65536];
-                    DatagramPacket packet = new DatagramPacket(buffer,
-                            buffer.length, InetAddress.getLocalHost(), 2014);
-                    socket.receive(packet);
-                    long sent = Utilities.bytesToLong(packet.getData());
-                    if (lastModuleResponse < sent) {
-                        lastModuleResponse = sent;
-                    }
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+            byte[] buffer = new byte[512];
+            try {
+                DatagramPacket packet = new DatagramPacket(buffer, buffer.length, InetAddress.getLocalHost(), 2014);
+                socket.send(packet);
+                socket.receive(packet);
+            } catch (IOException e) {
+                handleException(e, "Error sending and receiving the plugin packet!");
             }
         }
     }
@@ -149,12 +78,6 @@ public class PingListener extends Thread {
      */
     public void shutdown() {
         this.running.set(false);
-        try {
-            sender.join(1000);
-            receiver.join(1000);
-        } catch (InterruptedException e) {
-            handleException(e, "Could not shutdown the PingListener!");
-        }
     }
 
     /**
