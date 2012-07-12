@@ -17,6 +17,7 @@ package me.neatmonster.spacebukkit;
 import java.io.IOException;
 import java.util.Timer;
 import java.util.UUID;
+import java.io.File;
 
 import mcstats.Metrics;
 import me.neatmonster.spacebukkit.actions.PlayerActions;
