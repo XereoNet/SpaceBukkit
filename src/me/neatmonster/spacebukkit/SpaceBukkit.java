@@ -89,12 +89,8 @@ public class SpaceBukkit extends JavaPlugin {
     public void onEnable() {
         spacebukkit = this;
         
-        try {
-            pingListener = new PingListener();
-            pingListener.startup();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        pingListener = new PingListener();
+        pingListener.startup();
         
         configuration = YamlConfiguration.loadConfiguration(SpaceModule.CONFIGURATION);
         configuration.addDefault("General.salt", "<default>");
