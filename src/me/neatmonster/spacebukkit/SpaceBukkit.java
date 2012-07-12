@@ -92,7 +92,7 @@ public class SpaceBukkit extends JavaPlugin {
         pingListener = new PingListener();
         pingListener.startup();
         
-        configuration = YamlConfiguration.loadConfiguration(SpaceModule.CONFIGURATION);
+        configuration = YamlConfiguration.loadConfiguration(new File("SpaceModule", "configuration.yml"));
         configuration.addDefault("General.salt", "<default>");
         configuration.addDefault("General.worldContainer", Bukkit.getWorldContainer().getPath());
         configuration.addDefault("SpaceBukkit.port", 2011);
