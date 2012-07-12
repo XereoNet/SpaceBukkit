@@ -67,6 +67,8 @@ public class PingListener extends Thread {
                 DatagramPacket packet = new DatagramPacket(buffer, buffer.length, InetAddress.getLocalHost(), 2014);
                 socket.send(packet);
                 socket.receive(packet);
+            } catch (SocketTimeoutException e) {
+                onModuleNotFound();
             } catch (IOException e) {
                 handleException(e, "Error sending and receiving the plugin packet!");
             }
