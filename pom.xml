@@ -186,23 +186,10 @@
 
                         <!-- Todo: Remove spacemodule dependency -->
                         <filter>
-                            <artifact>com.thoughtworks.xstream:xstream</artifact>
+                            <artifact>me.neatmonster:spacemodule</artifact>
                             <includes>
-                                <include>**</include>
-                            </includes>
-                        </filter>
-
-                        <filter>
-                            <artifact>xmlpull:xmlpull</artifact>
-                            <includes>
-                                <include>**</include>
-                            </includes>
-                        </filter>
-
-                        <filter>
-                            <artifact>xpp3:xpp3_min</artifact>
-                            <includes>
-                                <include>**</include>
+                                <include>com/thoughtworks/xstream/**</include>
+                                <include>org/xmlpull/**</include>
                             </includes>
                         </filter>
                     </filters>
