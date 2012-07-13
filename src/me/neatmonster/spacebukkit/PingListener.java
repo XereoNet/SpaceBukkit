@@ -15,6 +15,7 @@
 package me.neatmonster.spacebukkit;
 
 import java.io.IOException;
+import java.io.SocketTimeoutException;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
