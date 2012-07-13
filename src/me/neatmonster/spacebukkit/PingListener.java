@@ -27,7 +27,8 @@ import java.util.concurrent.atomic.AtomicBoolean;
  * Pings the Module to ensure it is functioning correctly
  */
 public class PingListener extends Thread {
-    public static final int REQUEST_BUFFER = 10000; // Ten seconds
+    public static final int REQUEST_BUFFER = 60000; // Sixty seconds
+    public static final int SLEEP_TIME = 30000; // Thirty seconds
 
     private boolean lostModule;
 
@@ -75,6 +76,11 @@ public class PingListener extends Thread {
             try {
                 DatagramPacket packet = new DatagramPacket(buffer, buffer.length, localHost, 2014);
                 socket.send(packet);
+                try {
+                    Thread.sleep(SLEEP_TIME);
+                } catch (InterruptedException e) {
+                    handleException(e, "Error sleeping in the run() loop!");
+                }
                 socket.receive(packet);
             } catch (SocketTimeoutException e) {
                 onModuleNotFound();
