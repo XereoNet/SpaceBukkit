@@ -20,25 +20,34 @@ import java.net.DatagramSocket;
 import java.net.InetAddress;
 import java.net.SocketException;
 import java.net.SocketTimeoutException;
+import java.net.UnknownHostException;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
  * Pings the Module to ensure it is functioning correctly
  */
 public class PingListener extends Thread {
-    public static final int REQUEST_BUFFER = 10000; // Ten seconds
+    public static final int REQUEST_BUFFER = 60000; // Sixty seconds
+    public static final int SLEEP_TIME = 30000; // Thirty seconds
 
     private boolean lostModule;
 
     private DatagramSocket socket;
 
     private AtomicBoolean running = new AtomicBoolean(false);
+    
+    private InetAddress localHost;
 
     /**
      * Creates a new PingListener
      */
     public PingListener() {
         super("Ping Listener Main Thread");
+        try {
+            this.localHost = InetAddress.getLocalHost();
+        } catch (UnknownHostException e) {
+            handleException(e, "Unable to get the Local Host!");
+        }
         this.lostModule = false;
         try {
             this.socket = new DatagramSocket();
@@ -65,8 +74,13 @@ public class PingListener extends Thread {
         while (running.get()) {
             byte[] buffer = new byte[512];
             try {
-                DatagramPacket packet = new DatagramPacket(buffer, buffer.length, InetAddress.getLocalHost(), 2014);
+                DatagramPacket packet = new DatagramPacket(buffer, buffer.length, localHost, 2014);
                 socket.send(packet);
+                try {
+                    Thread.sleep(SLEEP_TIME);
+                } catch (InterruptedException e) {
+                    handleException(e, "Error sleeping in the run() loop!");
+                }
                 socket.receive(packet);
             } catch (SocketTimeoutException e) {
                 onModuleNotFound();
@@ -104,6 +118,7 @@ public class PingListener extends Thread {
         if (lostModule) {
             return;
         }
+        shutdown();
         System.err.println("[SpaceBukkit] Unable to ping the Module!");
         System.err
                 .println("[SpaceBukkit] Please insure the correct ports are open");
