@@ -35,7 +35,7 @@ public class PingListener extends Thread {
     private DatagramSocket socket;
 
     private AtomicBoolean running = new AtomicBoolean(false);
-
+    
     private InetAddress localHost;
 
     /**
@@ -99,7 +99,7 @@ public class PingListener extends Thread {
 
     /**
      * Called when an exception is thrown
-     *
+     * 
      * @param e
      *            Exception thrown
      */
