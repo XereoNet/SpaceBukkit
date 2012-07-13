@@ -183,6 +183,28 @@
                                 <include>**</include>
                             </includes>
                         </filter>
+
+                        <!-- Todo: Remove spacemodule dependency -->
+                        <filter>
+                            <artifact>com.thoughtworks.xstream:xstream</artifact>
+                            <includes>
+                                <include>**</include>
+                            </includes>
+                        </filter>
+
+                        <filter>
+                            <artifact>xmlpull:xmlpull</artifact>
+                            <includes>
+                                <include>**</include>
+                            </includes>
+                        </filter>
+
+                        <filter>
+                            <artifact>xpp3:xpp3_min</artifact>
+                            <includes>
+                                <include>**</include>
+                            </includes>
+                        </filter>
                     </filters>
 
                     <minimizeJar>true</minimizeJar>
