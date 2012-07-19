@@ -43,10 +43,6 @@ public class PluginsManager {
      * @return Jar File the plugin's code is contained in
      */
     public static File getJAR(final Plugin plugin) {
-        if (plugin == null) {
-            SpaceBukkit.getInstance().getLogger().severe("A plugin was null!");
-            return null;
-        }
         Class<?> currentClass = plugin.getClass();
         while (!(currentClass.equals(JavaPlugin.class))) {
             currentClass = currentClass.getSuperclass();
@@ -78,6 +74,9 @@ public class PluginsManager {
         new Thread(new PluginsRequester()).start();
         final YamlConfiguration configuration = YamlConfiguration.loadConfiguration(JARS_FILE);
         for (final Plugin plugin : Bukkit.getPluginManager().getPlugins()) {
+            if (plugin == null) {
+        	continue;
+            }
             final File jar = getJAR(plugin);
             if (jar != null)
                 configuration.set(plugin.getDescription().getName().toLowerCase().replace(" ", ""),
