@@ -49,6 +49,7 @@ public class SpaceBukkit extends JavaPlugin {
 
     public int                  port;
     public int                  rPort;
+    public int                  pingPort;
     public String               salt;
     
     public int                  maxJoins;
@@ -60,7 +61,7 @@ public class SpaceBukkit extends JavaPlugin {
     public PanelListener        panelListener;
     public PerformanceMonitor   performanceMonitor;
 
-    private YamlConfiguration   configuration;
+    private YamlConfiguration   config;
 
     private final Timer         timer  = new Timer();
 
@@ -93,28 +94,29 @@ public class SpaceBukkit extends JavaPlugin {
         pingListener = new PingListener();
         pingListener.startup();
         
-        configuration = YamlConfiguration.loadConfiguration(new File("SpaceModule", "configuration.yml"));
-        configuration.addDefault("General.salt", "<default>");
-        configuration.addDefault("General.worldContainer", Bukkit.getWorldContainer().getPath());
-        configuration.addDefault("SpaceBukkit.port", 2011);
-        configuration.addDefault("SpaceRTK.port", 2012);
-        configuration.addDefault("SpaceBukkit.maxJoins", 199);
-        configuration.addDefault("SpaceBukkit.maxMessages", 199);
-        configuration.addDefault("SpaceBukkit.maxQuits", 199);
-        configuration.options().copyDefaults(true);
-        salt = configuration.getString("General.salt", "<default>");
+        config = YamlConfiguration.loadConfiguration(new File("SpaceModule", "configuration.yml"));
+        config.addDefault("General.salt", "<default>");
+        config.addDefault("General.worldContainer", Bukkit.getWorldContainer().getPath());
+        config.addDefault("SpaceBukkit.port", 2011);
+        config.addDefault("SpaceRTK.port", 2012);
+        config.addDefault("SpaceBukkit.maxJoins", 199);
+        config.addDefault("SpaceBukkit.maxMessages", 199);
+        config.addDefault("SpaceBukkit.maxQuits", 199);
+        config.options().copyDefaults(true);
+        salt = config.getString("General.salt", "<default>");
         if (salt.equals("<default>")) {
             salt = UUID.randomUUID().toString().replaceAll("-", "").toUpperCase();
-            configuration.set("General.salt", salt);
+            config.set("General.salt", salt);
         }
-        configuration.set("General.worldContainer", Bukkit.getWorldContainer().getPath());
-        port = configuration.getInt("SpaceBukkit.port", 2011);
-        rPort = configuration.getInt("SpaceRTK.port", 2012);
-        maxJoins = configuration.getInt("SpaceBukkit.maxJoins", 199);
-        maxMessages = configuration.getInt("SpaceBukkit.maxMessages", 199);
-        maxQuits = configuration.getInt("SpaceBukkit.maxQuits", 199);
+        config.set("General.worldContainer", Bukkit.getWorldContainer().getPath());
+        port = config.getInt("SpaceBukkit.port", 2011);
+        rPort = config.getInt("SpaceRTK.port", 2012);
+        pingPort = config.getInt("SpaceBukkit.pingPort", 2014);
+        maxJoins = config.getInt("SpaceBukkit.maxJoins", 199);
+        maxMessages = config.getInt("SpaceBukkit.maxMessages", 199);
+        maxQuits = config.getInt("SpaceBukkit.maxQuits", 199);
         try {
-            configuration.save(SpaceModule.CONFIGURATION);
+            config.save(SpaceModule.CONFIGURATION);
         } catch (IOException e) {
             e.printStackTrace();
         }
