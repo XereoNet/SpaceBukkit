@@ -120,7 +120,7 @@ public class PanelListener extends Thread {
                 try {
                     final Socket clientSocket = serverSocket.accept();
                     new PanelListener(clientSocket);
-                } catch(SocketTimeoutException e) {
+                } catch(SocketException e) {
                     //Do nothing.
                 } catch (final Exception e) {
                         e.printStackTrace();
