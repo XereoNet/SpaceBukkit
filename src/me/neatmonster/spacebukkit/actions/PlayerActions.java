@@ -166,6 +166,19 @@ public class PlayerActions implements ActionHandler {
     }
 
     /**
+     * Gets all the banned ips
+     * @return All banned ips
+     */
+    @Action(
+            aliases = {"getBannedIps", "bannedIps"})
+    public List<String> getBannedIps() {
+        final List<String> iplist = new ArrayList<String>();
+        for (final String ip : Bukkit.getIPBans())
+            iplist.add(ip);
+        return iplist;
+    }
+    
+    /**
      * Gets a players inventory
      * @param playerName Inventory to get
      * @return Players inventory
