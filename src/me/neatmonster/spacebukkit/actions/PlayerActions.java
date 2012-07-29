@@ -174,7 +174,6 @@ public class PlayerActions implements ActionHandler {
     public List<String> getBannedIps() {
         final List<String> iplist = new ArrayList<String>();
         for (final String ip : Bukkit.getIPBans())
-            System.out.println(ip); //debug
             iplist.add(ip);
         return iplist;
     }
