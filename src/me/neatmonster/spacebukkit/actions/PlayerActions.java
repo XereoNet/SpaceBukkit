@@ -238,7 +238,7 @@ public class PlayerActions implements ActionHandler {
             playerInformations.put("DisplayName", Utilities.stripColor(player.getDisplayName()));
             playerInformations.put("EntityId", player.getEntityId());
             playerInformations.put("World", player.getLocation().getWorld().getName());
-            playerInformations.put("IP", player.getAddress());
+            playerInformations.put("IP", player.getAddress().getHostAddress());
             playerInformations.put("X", player.getLocation().getX());
             playerInformations.put("Y", player.getLocation().getY());
             playerInformations.put("Z", player.getLocation().getZ());
