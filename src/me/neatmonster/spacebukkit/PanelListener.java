@@ -18,10 +18,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
-import java.net.ServerSocket;
-import java.net.Socket;
-import java.net.SocketException;
-import java.net.URLDecoder;
+import java.net.*;
 import java.util.List;
 
 import me.neatmonster.spacebukkit.events.RequestEvent;
@@ -120,9 +117,8 @@ public class PanelListener extends Thread {
                 try {
                     final Socket clientSocket = serverSocket.accept();
                     new PanelListener(clientSocket);
-                } catch(SocketException e) {
-                    //Do nothing.
                 } catch (final Exception e) {
+                    if(!(e instanceof SocketTimeoutException))
                         e.printStackTrace();
                 }
             }
