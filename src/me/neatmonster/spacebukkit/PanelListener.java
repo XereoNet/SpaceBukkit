@@ -117,8 +117,10 @@ public class PanelListener extends Thread {
                 try {
                     final Socket clientSocket = serverSocket.accept();
                     new PanelListener(clientSocket);
-                } catch (final Exception e) {
-                    if(!(e instanceof SocketTimeoutException))
+                } catch (SocketTimeoutException e) {
+                    // Do nothing.
+                } catch (IOException e) {
+                    if (!e.getMessage().contains("socket closed"))
                         e.printStackTrace();
                 }
             }
