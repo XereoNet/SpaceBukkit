@@ -43,11 +43,11 @@ public class PluginsManager {
      * @return Jar File the plugin's code is contained in
      */
     public static File getJAR(final Plugin plugin) {
-        Class<?> currentClass = plugin.getClass();
-        while (!(currentClass.equals(JavaPlugin.class))) {
-            currentClass = currentClass.getSuperclass();
-        }
         try {
+            Class<?> currentClass = plugin.getClass();
+            while (!(currentClass.equals(JavaPlugin.class))) {
+                currentClass = currentClass.getSuperclass();
+            }
             final Class<?>[] methodArgs = {};
             final Method method = currentClass.getDeclaredMethod("getFile", methodArgs);
             method.setAccessible(true);
@@ -63,6 +63,8 @@ public class PluginsManager {
             e.printStackTrace();
         } catch (final InvocationTargetException e) {
             e.printStackTrace();
+        } catch (final NullPointerException e) {
+            // Ignore
         }
         return null;
     }
@@ -74,9 +76,6 @@ public class PluginsManager {
         new Thread(new PluginsRequester()).start();
         final YamlConfiguration configuration = YamlConfiguration.loadConfiguration(JARS_FILE);
         for (final Plugin plugin : Bukkit.getPluginManager().getPlugins()) {
-            if (plugin == null) {
-        	continue;
-            }
             final File jar = getJAR(plugin);
             if (jar != null)
                 configuration.set(plugin.getDescription().getName().toLowerCase().replace(" ", ""),
