@@ -19,7 +19,7 @@ import me.neatmonster.spacebukkit.SpaceBukkit;
 import org.bukkit.Bukkit;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.player.PlayerChatEvent;
+import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.event.server.ServerCommandEvent;
@@ -42,7 +42,7 @@ public class SBListener implements Listener {
      * @param event Relevant event details
      */
     @EventHandler(ignoreCancelled = true)
-    public void onPlayerChat(final PlayerChatEvent event) {
+    public void onPlayerChat(final AsyncPlayerChatEvent event) {
         PlayerLogger.addPlayerChat(event.getPlayer().getName(), event.getMessage());
     }
 
