@@ -225,7 +225,7 @@ public class SystemActions implements ActionHandler {
     @Action(
             aliases = {"getPhysicalMemoryFree", "physicalMemoryFree"})
     public long getPhysicalMemoryFree() {
-        return Math.round((float)SpaceBukkit.getInstance().performanceMonitor.getPhysicalMemoryFree() / 1048576.0f);
+        return Runtime.getRuntime().freeMemory();
     }
 
     /**
