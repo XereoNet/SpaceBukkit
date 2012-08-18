@@ -216,19 +216,7 @@ public class ServerActions implements ActionHandler {
         return true;
     }
 
-    /**
-     * Gets all banned IP's
-     * @return All banned IP's
-     */
-    @Action(
-            aliases = {"getBannedIPs", "bannedIps"})
-    public String[] getBannedIPs() {
-        final Set<String> ipsSet = Bukkit.getIPBans();
-        final String[] ips = new String[ipsSet.size()];
-        for (int a = 0; a < ipsSet.size(); a++)
-            ips[a] = (String) ipsSet.toArray()[a];
-        return ips;
-    }
+
 
     /**
      * Gets all disabled plugins
