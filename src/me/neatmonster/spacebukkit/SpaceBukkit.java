@@ -114,7 +114,7 @@ public class SpaceBukkit extends JavaPlugin {
         port = config.getInt("SpaceBukkit.port", 2011);
         rPort = config.getInt("SpaceRTK.port", 2012);
         bindIp = config.getString("General.bindIp", "0.0.0.0");
-        if(bindIp.equals("")) {
+        if(bindIp.trim().isEmpty()) {
             bindIp = "0.0.0.0";
         }
         pingPort = config.getInt("SpaceBukkit.pingPort", 2014);
