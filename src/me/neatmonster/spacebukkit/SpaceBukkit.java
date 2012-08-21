@@ -98,11 +98,7 @@ public class SpaceBukkit extends JavaPlugin {
         config = YamlConfiguration.loadConfiguration(new File("SpaceModule", "configuration.yml"));
         config.addDefault("General.salt", "<default>");
         config.addDefault("General.worldContainer", Bukkit.getWorldContainer().getPath());
-        if(Bukkit.getServer().getIp().equals("")) {
-            config.addDefault("General.bindIp", "0.0.0.0");
-        } else {
-            config.addDefault("General.bindIp", Bukkit.getServer().getIp());
-        }
+        config.addDefault("General.bindIp", Bukkit.getServer().getIp());
         config.addDefault("SpaceBukkit.port", 2011);
         config.addDefault("SpaceRTK.port", 2012);
         config.addDefault("SpaceBukkit.maxJoins", 199);
@@ -118,6 +114,9 @@ public class SpaceBukkit extends JavaPlugin {
         port = config.getInt("SpaceBukkit.port", 2011);
         rPort = config.getInt("SpaceRTK.port", 2012);
         bindIp = config.getString("General.bindIp", "0.0.0.0");
+        if(bindIp.equals("")) {
+            bindIp = "0.0.0.0";
+        }
         pingPort = config.getInt("SpaceBukkit.pingPort", 2014);
         maxJoins = config.getInt("SpaceBukkit.maxJoins", 199);
         maxMessages = config.getInt("SpaceBukkit.maxMessages", 199);
