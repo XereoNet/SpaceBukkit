@@ -98,7 +98,11 @@ public class SpaceBukkit extends JavaPlugin {
         config = YamlConfiguration.loadConfiguration(new File("SpaceModule", "configuration.yml"));
         config.addDefault("General.salt", "<default>");
         config.addDefault("General.worldContainer", Bukkit.getWorldContainer().getPath());
-        config.addDefault("General.bindIp", Bukkit.getServer().getIp());
+        if(Bukkit.getServer().getIp().equals("")) {
+            config.addDefault("General.bindIp", "0.0.0.0");
+        } else {
+            config.addDefault("General.bindIp", Bukkit.getServer().getIp());
+        }
         config.addDefault("SpaceBukkit.port", 2011);
         config.addDefault("SpaceRTK.port", 2012);
         config.addDefault("SpaceBukkit.maxJoins", 199);
