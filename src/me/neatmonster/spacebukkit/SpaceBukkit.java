@@ -15,6 +15,8 @@
 package me.neatmonster.spacebukkit;
 
 import java.io.IOException;
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 import java.util.Timer;
 import java.util.UUID;
 import java.io.File;
@@ -51,7 +53,7 @@ public class SpaceBukkit extends JavaPlugin {
     public int                  rPort;
     public int                  pingPort;
     public String               salt;
-    public String               bindIp;
+    public InetAddress          bindAddress;
     
     public int                  maxJoins;
     public int                  maxMessages;
@@ -113,10 +115,22 @@ public class SpaceBukkit extends JavaPlugin {
         config.set("General.worldContainer", Bukkit.getWorldContainer().getPath());
         port = config.getInt("SpaceBukkit.port", 2011);
         rPort = config.getInt("SpaceRTK.port", 2012);
-        bindIp = config.getString("General.bindIp", "0.0.0.0");
-        if(bindIp.trim().isEmpty()) {
-            bindIp = "0.0.0.0";
+
+
+        String bindAddressString = config.getString("General.bindIp", "0.0.0.0");
+        if(bindAddressString.trim().isEmpty())
+            bindAddressString = "0.0.0.0";
+        try {
+            bindAddress = InetAddress.getByName(bindAddressString);
+        } catch(UnknownHostException e) {
+            try {
+                bindAddress = InetAddress.getLocalHost();
+            } catch(UnknownHostException e2) {}
+            System.err.println("Warning: Could not assign bind address " + bindAddressString + ":");
+            System.err.println(e.getMessage());
+            System.err.println("Will bind to loopback address: " + bindAddress.getHostAddress() + "...");
         }
+
         pingPort = config.getInt("SpaceBukkit.pingPort", 2014);
         maxJoins = config.getInt("SpaceBukkit.maxJoins", 199);
         maxMessages = config.getInt("SpaceBukkit.maxMessages", 199);

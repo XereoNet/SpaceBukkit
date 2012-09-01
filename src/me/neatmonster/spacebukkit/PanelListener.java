@@ -106,7 +106,7 @@ public class PanelListener extends Thread {
         if (mode == 0) {
 
             try {
-                serverSocket = new ServerSocket(SpaceBukkit.getInstance().port, SO_BACKLOG, InetAddress.getByName(SpaceBukkit.getInstance().bindIp));
+                serverSocket = new ServerSocket(SpaceBukkit.getInstance().port, SO_BACKLOG, SpaceBukkit.getInstance().bindAddress);
                 serverSocket.setSoTimeout(SO_TIMEOUT);
             } catch(IOException e) {
                 e.printStackTrace();
