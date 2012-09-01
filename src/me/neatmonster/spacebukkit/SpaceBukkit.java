@@ -66,17 +66,15 @@ public class SpaceBukkit extends JavaPlugin {
 
     private YamlConfiguration   config;
 
-    private final Timer         timer  = new Timer();
+    private final Timer         timer  = new Timer("SpaceBukkit Timer Thread", false);
 
     private EventDispatcher     edt;
     private ToolkitEventHandler eventHandler;
-    private PingListener pingListener;
 
     @Override
     public void onDisable() {
         performanceMonitor.infanticide();
         timer.cancel();
-        pingListener.shutdown();
         try {
             if (panelListener != null)
                 panelListener.stopServer();
@@ -93,9 +91,6 @@ public class SpaceBukkit extends JavaPlugin {
     @Override
     public void onEnable() {
         spacebukkit = this;
-        
-        pingListener = new PingListener();
-        pingListener.startup();
         
         config = YamlConfiguration.loadConfiguration(new File("SpaceModule", "configuration.yml"));
         config.addDefault("General.salt", "<default>");
