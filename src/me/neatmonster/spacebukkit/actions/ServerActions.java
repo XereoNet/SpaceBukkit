@@ -226,9 +226,10 @@ public class ServerActions implements ActionHandler {
             aliases = {"getDisabledPlugins"})
     public List<String> getDisabledPlugins() {
         final List<String> disabledPluginsNames = new ArrayList<String>();
-        for (final Plugin plugin : Bukkit.getPluginManager().getPlugins())
+        for (final Plugin plugin : Bukkit.getPluginManager().getPlugins()) {
             if (!plugin.isEnabled())
                 disabledPluginsNames.add(plugin.getDescription().getName());
+        }
         return disabledPluginsNames;
     }
 
@@ -420,13 +421,17 @@ public class ServerActions implements ActionHandler {
             aliases = {"getPluginInformations", "pluginInformations"})
     public LinkedHashMap<String, Object> getPluginInformations(final String pluginName) {
         final LinkedHashMap<String, Object> pluginInformations = new LinkedHashMap<String, Object>();
-        final Plugin plugin = Bukkit.getPluginManager().getPlugin(pluginName);
+        final Plugin plugin = Bukkit.getPluginManager().getPlugin(Utilities.decodeEscapeSequences(pluginName));
+
         if (plugin != null) {
             pluginInformations.put("Name", plugin.getDescription().getName());
             pluginInformations.put("IsEnabled", plugin.isEnabled());
             pluginInformations.put("Commands", plugin.getDescription().getCommands());
             pluginInformations.put("Depend", plugin.getDescription().getDepend());
-            pluginInformations.put("DataFolder", plugin.getDataFolder().getPath());
+            if(plugin.getDataFolder() != null)
+                pluginInformations.put("DataFolder", plugin.getDataFolder().getPath());
+            else
+                pluginInformations.put("DataFolder", "");
             pluginInformations.put("SoftDepend", plugin.getDescription().getSoftDepend());
             pluginInformations.put("Authors", plugin.getDescription().getAuthors());
             pluginInformations.put("Description", plugin.getDescription().getDescription());
@@ -461,8 +466,9 @@ public class ServerActions implements ActionHandler {
             aliases = {"getPlugins", "plugins"})
     public LinkedList<String> getPlugins() {
         final LinkedList<String> pluginsNames = new LinkedList<String>();
-        for (final Plugin plugin : Bukkit.getPluginManager().getPlugins())
+        for (final Plugin plugin : Bukkit.getPluginManager().getPlugins()) {
             pluginsNames.add(plugin.getDescription().getName());
+        }
         return pluginsNames;
     }
 

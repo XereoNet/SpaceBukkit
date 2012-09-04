@@ -23,6 +23,8 @@ import java.net.URLConnection;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import me.neatmonster.spacebukkit.SpaceBukkit;
 
@@ -208,6 +210,20 @@ public class Utilities {
             index++;
         }
         return string;
+    }
+
+    public static String decodeEscapeSequences(String s) {
+        Pattern escapePattern = Pattern.compile("(&#\\d+;)");
+        Pattern charValue = Pattern.compile("&#(\\d+);");
+        Matcher escapeMatcher = escapePattern.matcher(s);
+        while(escapeMatcher.find()) {
+            Matcher m = charValue.matcher(escapeMatcher.group(0));
+            if(!m.matches())
+                break;
+            char character = (char)Short.parseShort(m.group(1));
+            s = s.replaceFirst("&#\\d+;", ""+character);
+        }
+        return s;
     }
     
     /**

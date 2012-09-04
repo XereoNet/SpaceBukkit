@@ -37,17 +37,19 @@ public class PluginsManager {
 
     /**
      * Gets the Jar of a plugin
-     * @param plugin
+     * @param p
      * @return Jar File the plugin's code is contained in
      */
-    public static File getJAR(final Plugin plugin) {
-        Class<?> currentClass = plugin.getClass();
-        while (!(currentClass.equals(JavaPlugin.class))) {
-            currentClass = currentClass.getSuperclass();
-        }
+    public static File getJAR(Plugin p) {
+        JavaPlugin plugin;
+        if(p instanceof JavaPlugin)
+            plugin = (JavaPlugin) p;
+        else
+            return null;
+
         try {
             final Class<?>[] methodArgs = {};
-            final Method method = currentClass.getDeclaredMethod("getFile", methodArgs);
+            final Method method = JavaPlugin.class.getDeclaredMethod("getFile", methodArgs);
             method.setAccessible(true);
             final Object[] classArgs = {};
             return (File) method.invoke(plugin, classArgs);
