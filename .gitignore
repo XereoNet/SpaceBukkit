@@ -18,3 +18,6 @@
 *.ipr
 *.iws
 .idea/
+
+# Vim
+*.swp
