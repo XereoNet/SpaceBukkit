@@ -18,12 +18,13 @@ import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.net.URL;
 import java.net.URLConnection;
-import java.util.ArrayList;
+import java.util.List;
 
 import me.neatmonster.spacebukkit.SpaceBukkit;
 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONValue;
+import org.json.simple.JSONObject;
 
 /**
  * Requests the plugins from BukGet
@@ -33,7 +34,8 @@ public class PluginsRequester implements Runnable {
     @Override
     @SuppressWarnings("unchecked")
     public void run() {
-        try {
+		//TODO: Remove class
+        /*try {
             final URLConnection connection = new URL("http://api.bukget.org/api2/bukkit/").openConnection();
             final BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
             final StringBuffer stringBuffer = new StringBuffer();
@@ -41,12 +43,15 @@ public class PluginsRequester implements Runnable {
             while ((line = bufferedReader.readLine()) != null)
                 stringBuffer.append(line);
             bufferedReader.close();
-            PluginsManager.pluginsNames = (JSONArray) JSONValue.parse(stringBuffer.toString());
+			List<JSONObject> apiResponse = (JSONArray) JSONValue.parse(stringBuffer.toString());
+			
+            //PluginsManager.pluginsNames = (JSONArray) JSONValue.parse(stringBuffer.toString());
             SpaceBukkit.getInstance().getLogger().info("Database contains "
                     + PluginsManager.pluginsNames.size() + " plugins.");
         } catch (final Exception e) {
             e.printStackTrace();
         }
         PluginsManager.pluginsNames = new ArrayList<String>();
+        */
     }
 }
