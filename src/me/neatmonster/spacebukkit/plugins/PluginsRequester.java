@@ -34,7 +34,7 @@ public class PluginsRequester implements Runnable {
     @SuppressWarnings("unchecked")
     public void run() {
         try {
-            final URLConnection connection = new URL("http://bukget.org/api/plugins").openConnection();
+            final URLConnection connection = new URL("http://api.bukget.org/api2/bukkit/").openConnection();
             final BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
             final StringBuffer stringBuffer = new StringBuffer();
             String line;
