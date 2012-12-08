@@ -28,6 +28,7 @@ import me.neatmonster.spacemodule.api.UnhandledActionException;
 
 import org.bukkit.Bukkit;
 import org.json.simple.JSONValue;
+import java.lang.reflect.Field;
 
 /**
  * Listens and accepts requests from the panel
@@ -65,6 +66,45 @@ public class PanelListener extends Thread {
             e.printStackTrace();
         }
         return null;
+    }
+    /**
+     * Interprets a raw command from the panel (multiple)
+     * @param string input from panel
+     * @return result of the action
+     * @throws InvalidArgumentsException Thrown when the wrong arguments are used by the panel
+     * @throws UnhandledActionException Thrown when there is no handler for the action
+     */
+    @SuppressWarnings("unchecked")
+    private static Object interpretm(final String string) throws InvalidArgumentsException, UnhandledActionException {
+        final int indexOfMethod = string.indexOf("?method=");
+        final int indexOfArguments = string.indexOf("&args=");
+        final int indexOfKey = string.indexOf("&key=");
+        final String methodString = string.substring(indexOfMethod + 8, indexOfArguments);
+        final String argumentsString = string.substring(indexOfArguments + 6, indexOfKey);
+        final List<Object> methods = (List<Object>) JSONValue.parse(methodString);
+        final List<Object> arguments = (List<Object>) JSONValue.parse(argumentsString);
+        final List<Object> result = (List<Object>) JSONValue.parse("[]");
+        for (int i = 0; i < methods.size(); i++) {
+    		String argsString = arguments.toArray()[i].toString();
+    		List<Object> args = (List<Object>) JSONValue.parse(argsString);
+            try {
+                if (SpaceBukkit.getInstance().actionsManager.contains(methods.toArray()[i].toString()))
+                    result.add(SpaceBukkit.getInstance().actionsManager.execute(methods.toArray()[i].toString(), args.toArray()));
+                else {
+                    final RequestEvent event = new RequestEvent(methods.toArray()[i].toString(), args.toArray());
+                    Bukkit.getPluginManager().callEvent(event);
+                    result.add(JSONValue.toJSONString(event.getResult()));
+                }
+            } catch (final InvalidArgumentsException e) {
+            	result.add(null);
+                e.printStackTrace();
+            } catch (final UnhandledActionException e) {
+            	result.add(null);
+                e.printStackTrace();
+            }
+            
+    	}
+        return result;
     }
 
     private static final int SO_BACKLOG = 128;
@@ -144,6 +184,17 @@ public class PanelListener extends Thread {
                             output.println(Utilities.addHeader(null));
                     } else
                         output.println(Utilities.addHeader("Incorrect Salt supplied. Access denied!"));
+                } 
+                else if (string.startsWith("multiple") && string.contains("?method=") && string.contains("&args=")) {
+                	final String method = string.substring(16, string.indexOf("&args="));
+                    if (string.contains("&key=" + Utilities.crypt(method + SpaceBukkit.getInstance().salt))) {
+                        final Object result = interpretm(string);
+                        if (result != null)
+                            output.println(Utilities.addHeader(JSONValue.toJSONString(result)));
+                        else
+                            output.println(Utilities.addHeader(null));
+                    } else
+                        output.println(Utilities.addHeader("Incorrect Salt supplied. Access denied!"));
                 } else if (string.startsWith("ping"))
                     output.println(Utilities.addHeader("Pong!"));
                 else
@@ -167,4 +218,36 @@ public class PanelListener extends Thread {
             serverSocket.close();
         }
     }
+    public static String dump(Object object) {
+        Field[] fields = object.getClass().getDeclaredFields();
+        StringBuilder sb = new StringBuilder();
+        sb.append(object.getClass().getSimpleName()).append('{');
+
+        boolean firstRound = true;
+
+        for (Field field : fields) {
+            if (!firstRound) {
+                sb.append(", ");
+            }
+            firstRound = false;
+            field.setAccessible(true);
+            try {
+                final Object fieldObj = field.get(object);
+                final String value;
+                if (null == fieldObj) {
+                    value = "null";
+                } else {
+                    value = fieldObj.toString();
+                }
+                sb.append(field.getName()).append('=').append('\'')
+                        .append(value).append('\'');
+            } catch (IllegalAccessException ignore) {
+                //this should never happen
+            }
+
+        }
+
+        sb.append('}');
+        return sb.toString();
+    }    
 }
