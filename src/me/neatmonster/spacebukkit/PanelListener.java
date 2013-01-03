@@ -160,7 +160,7 @@ public class PanelListener extends Thread {
                 } catch (SocketTimeoutException e) {
                     // Do nothing.
                 } catch (IOException e) {
-                    if (!e.getMessage().contains("socket closed"))
+                    if (!e.getMessage().toLowerCase().contains("socket closed"))
                         e.printStackTrace();
                 }
             }
