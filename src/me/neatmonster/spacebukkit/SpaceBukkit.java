@@ -21,6 +21,7 @@ import java.util.Timer;
 import java.util.UUID;
 import java.io.File;
 
+import com.drdanick.rtoolkit.system.EventDispatchWorker;
 import mcstats.Metrics;
 import me.neatmonster.spacebukkit.actions.PlayerActions;
 import me.neatmonster.spacebukkit.actions.ServerActions;
@@ -36,7 +37,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import com.drdanick.rtoolkit.EventDispatcher;
+import com.drdanick.rtoolkit.system.EventDispatcher;
 import com.drdanick.rtoolkit.event.ToolkitEventHandler;
 /**
  * Main class of the Plugin
@@ -70,6 +71,7 @@ public class SpaceBukkit extends JavaPlugin {
 
     private EventDispatcher     edt;
     private ToolkitEventHandler eventHandler;
+    private EventDispatchWorker toolkitEventWorker;
 
     @Override
     public void onDisable() {
@@ -85,7 +87,7 @@ public class SpaceBukkit extends JavaPlugin {
         synchronized (edt) {
             edt.notifyAll();
         }
-        eventHandler.setEnabled(false);
+        toolkitEventWorker.setEnabled(false);
     }
 
     @Override
@@ -139,6 +141,12 @@ public class SpaceBukkit extends JavaPlugin {
         if(edt == null)
             edt = new EventDispatcher();
 
+        if(toolkitEventWorker == null) {
+            toolkitEventWorker = new EventDispatchWorker();
+            toolkitEventWorker.setEnabled(true);
+            edt.registerEventHandler(eventHandler, toolkitEventWorker);
+        }
+
         if(!edt.isRunning()) {
             synchronized(edt) {
                 edt.notifyAll();
@@ -149,13 +157,8 @@ public class SpaceBukkit extends JavaPlugin {
             edtThread.start();
         }
 
-        if(eventHandler != null) {
-            eventHandler.setEnabled(true);
-            if(!eventHandler.isRunning())
-                new Thread(eventHandler, "SpaceModule EventHandler").start();
-        } else {
-            eventHandler = new EventHandler();
-            new Thread(eventHandler, "SpaceModule EventHandler").start();
+        if(!toolkitEventWorker.isRunning()) {
+            toolkitEventWorker.setEnabled(true);
         }
         
         setupMetrics();
@@ -201,12 +204,9 @@ public class SpaceBukkit extends JavaPlugin {
     }
 
     /**
-     * Forces the event handler into the correct state.
+     * A terrible hack to illegitimately create a ToolkitEventHandler
      */
     private class EventHandler extends ToolkitEventHandler {
-        public EventHandler() {
-            setEnabled(true);
-        }
     }
 
 }
