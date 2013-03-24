@@ -83,8 +83,8 @@
 
         <dependency>
             <groupId>org.bukkit</groupId>
-            <artifactId>craftbukkit</artifactId>
-            <version>1.4.5-R1.0</version>
+            <artifactId>bukkit</artifactId>
+            <version>RELEASE</version>
             <scope>compile</scope>
         </dependency>
 
