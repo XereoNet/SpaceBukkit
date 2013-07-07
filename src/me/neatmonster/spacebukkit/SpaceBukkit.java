@@ -22,6 +22,7 @@ import java.util.UUID;
 import java.io.File;
 
 import com.drdanick.rtoolkit.system.EventDispatchWorker;
+import com.drdanick.rtoolkit.system.SingleWorkerPool;
 import mcstats.Metrics;
 import me.neatmonster.spacebukkit.actions.PlayerActions;
 import me.neatmonster.spacebukkit.actions.ServerActions;
@@ -139,7 +140,7 @@ public class SpaceBukkit extends JavaPlugin {
         }
 
         if(edt == null)
-            edt = new EventDispatcher();
+            edt = new EventDispatcher(new SingleWorkerPool());
 
         if(toolkitEventWorker == null) {
             toolkitEventWorker = new EventDispatchWorker();
